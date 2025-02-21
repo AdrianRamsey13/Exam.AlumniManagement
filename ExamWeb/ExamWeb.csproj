@@ -149,6 +149,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Connected Services\JobPostingService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Connected Services\MajorService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -159,6 +164,7 @@
     <Compile Include="Controllers\FacultyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JobHistoryController.cs" />
+    <Compile Include="Controllers\JobPostingController.cs" />
     <Compile Include="Controllers\MajorController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -168,6 +174,7 @@
     <Compile Include="Interfaces\IExcelService.cs" />
     <Compile Include="Interfaces\IFacultyRepository.cs" />
     <Compile Include="Interfaces\IJobHistoryRepository.cs" />
+    <Compile Include="Interfaces\IJobPostingRepository.cs" />
     <Compile Include="Interfaces\IMajorRepository.cs" />
     <Compile Include="ModelMapping.cs" />
     <Compile Include="Models\AlumniImageModel.cs" />
@@ -176,6 +183,7 @@
     <Compile Include="Models\FacultyModel.cs" />
     <Compile Include="Models\HobbyModel.cs" />
     <Compile Include="Models\JobHistoryModel.cs" />
+    <Compile Include="Models\JobPostingModel.cs" />
     <Compile Include="Models\MajorModel.cs" />
     <Compile Include="Models\StateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -184,6 +192,7 @@
     <Compile Include="Services\ExcelService.cs" />
     <Compile Include="Services\FacultyRepository.cs" />
     <Compile Include="Services\JobHistoryRepository.cs" />
+    <Compile Include="Services\JobPostingRepository.cs" />
     <Compile Include="Services\MajorRepository.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -268,6 +277,16 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <Content Include="Connected Services\JobPostingService\ExamWeb.JobPostingService.JobPostingDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\JobPostingService\JobPostingService.disco" />
+    <None Include="Connected Services\JobPostingService\configuration91.svcinfo" />
+    <None Include="Connected Services\JobPostingService\configuration.svcinfo" />
+    <None Include="Connected Services\JobPostingService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Connected Services\MajorService\ExamWeb.MajorService.MajorDTO.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
@@ -292,6 +311,19 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\JobHistoryService\JobHistoryService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\JobPostingService\JobPostingService.wsdl" />
+    <None Include="Connected Services\JobPostingService\JobPostingService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\JobPostingService\JobPostingService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\JobPostingService\JobPostingService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\JobPostingService\JobPostingService3.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\MajorService\MajorService.disco" />
@@ -382,6 +414,9 @@
     <Content Include="Views\Alumni\_CreatePartial.cshtml" />
     <Content Include="Views\Faculty\_CreateFaculty.cshtml" />
     <Content Include="Views\Faculty\_EditFaculty.cshtml" />
+    <Content Include="Views\JobPosting\Index.cshtml" />
+    <Content Include="Views\JobPosting\Create.cshtml" />
+    <Content Include="Views\JobPosting\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\AlumniImages\" />
@@ -422,6 +457,7 @@
     <WCFMetadataStorage Include="Connected Services\AlumniService\" />
     <WCFMetadataStorage Include="Connected Services\FacultyService\" />
     <WCFMetadataStorage Include="Connected Services\JobHistoryService\" />
+    <WCFMetadataStorage Include="Connected Services\JobPostingService\" />
     <WCFMetadataStorage Include="Connected Services\MajorService\" />
   </ItemGroup>
   <PropertyGroup>

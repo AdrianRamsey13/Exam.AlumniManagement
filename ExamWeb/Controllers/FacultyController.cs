@@ -32,6 +32,7 @@ namespace ExamWeb.Controllers
 
         public ActionResult Index()
         {
+            var employmentType = 
             return View();
         }
 
