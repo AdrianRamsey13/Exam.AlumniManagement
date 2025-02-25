@@ -113,56 +113,102 @@ namespace ExamWeb.Controllers
             return View();
         }
 
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public JsonResult CreateApplyJob(FormCollection form, HttpPostedFileBase cv, HttpPostedFileBase idCard, HttpPostedFileBase certificate)
+        public JsonResult ApplyToJob(HttpPostedFileBase[] attachments, int[] AttachmentTypeIDs, JobAttachmentModel jobAttachments)
         {
             try
             {
-                var alumniId = int.Parse(form["alumni"]);
-                var jobId = Guid.Parse(form["jobId"]);
-
-                // Simpan JobCandidate
-                var jobCandidate = new JobCandidateDTO
+                if (attachments != null && AttachmentTypeIDs != null && attachments.Length == AttachmentTypeIDs.Length)
                 {
-                    AlumniID = alumniId,
-                    JobID = jobId,
-                    ApplyDate = DateTime.Now
-                };
+                    for (int i = 0; i < attachments.Length; i++)
+                    {
+                        var file = attachments[i];
+                        var attachmentTypeID = AttachmentTypeIDs[i];
 
-                //_jpRepository.InsertJobApply(jobCandidate);
+                        if (file != null && file.ContentLength > 0)
+                        {
+                            var extension = Path.GetExtension(file.FileName).ToLower();
 
-                // Simpan file sebagai JobAttachment
-                List<JobAttachmentDTO> attachments = new List<JobAttachmentDTO>();
+                            // Exclude dangerous file types
+                            if (extension == ".exe" || extension == ".dll")
+                            {
+                                return Json(new { success = false, message = "File type not allowed." });
+                            }
 
-                if (cv != null && cv.ContentLength > 0)
-                {
-                    attachments.Add(SaveAttachment(cv, alumniId, jobId, 1)); // 1 = CV
+                            // Generate file name and path
+                            var fileName = Guid.NewGuid().ToString() + extension;
+                            var filePath = Path.Combine(Server.MapPath(jobAttachmentsPath), fileName);
+                            file.SaveAs(filePath);
+
+                            var random = new Random();
+                            var jobAttachment = new JobAttachmentModel
+                            {
+                                AttachmentID = random.Next(100000, 999999), // 🎲 Random int 6 digit
+                                JobID = jobAttachments.JobID,
+                                AlumniID = jobAttachments.AlumniID,
+                                AttachmentTypeID = Convert.ToByte(attachmentTypeID), // ✅ Now properly assigned
+                                FileName = fileName,
+                                FilePath = jobAttachmentsPath,
+                            };
+                            _jpRepository.ApplyToJob(jobAttachment);
+                        }
+                    }
+                    var jobCandidate = new JobCandidateModel
+                    {
+                        JobID = jobAttachments.JobID,
+                        AlumniID = jobAttachments.AlumniID,
+                        ApplyDate = DateTime.Now
+                    };
+                    _jpRepository.InsertJobCandidate(jobCandidate);
+                    return Json(new { success = true, message = "Application submitted successfully!" });
                 }
-                if (idCard != null && idCard.ContentLength > 0)
-                {
-                    attachments.Add(SaveAttachment(idCard, alumniId, jobId, 2)); // 2 = ID Card
-                }
-                if (certificate != null && certificate.ContentLength > 0)
-                {
-                    attachments.Add(SaveAttachment(certificate, alumniId, jobId, 3)); // 3 = Certificate
-                }
-
-                // Pastikan setidaknya satu dokumen ada
-                if (!attachments.Any())
-                {
-                    return Json(new { success = false, message = "All documents (CV, ID Card, Certificate) are required!" });
-                }
-
-                _jpRepository.InsertJobAttachments(attachments);
-
-                return Json(new { success = true, message = "Application submitted successfully!" });
+                return Json(new { error = true, errorMsg = "Attachments must not be empty or mismatched." });
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "Error: " + ex.Message });
             }
+        }
+
+        public ActionResult UpsertJobPosting(JobPostingModel jobPosting)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _jpRepository.UpsertJobPosting(jobPosting);
+                    return Json(new { success = true });
+                }
+                return Json(new { error = true, errorMsg = "Error adding job posting" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error deleting job posting: " + ex.Message });
+            }
+        }
+
+        public JsonResult GetJobDetails(Guid jobID)
+        {
+            var jobDetails = _jpRepository.GetJobPostingByID(jobID); // Fetch job details, including attachment types
+
+            // Now, using a comparison based on AlumniID to exclude the existing candidates
+            var alumnis = _alumniRepository.GetAlumnis()
+                .Select(a => new { a.AlumniID, FullName = a.FirstName + " " + (a.MiddleName ?? "") + " " + a.LastName })
+                .Where(a => !jobDetails.SelectedCandidates.Contains(a.AlumniID)) // Exclude alumni that are already in existingCandidates
+                .ToList();
+
+            // Get attachment names by mapping SelectedAttachmentTypes to their respective names
+            var requiredAttachments = jobDetails.SelectedAttachmentTypes
+                .Select((id, index) => new
+                {
+                    AttachmentTypeID = id,
+                    Name = jobDetails.AttachmentTypeDisplay.Split(',')
+                              .Select(n => n.Trim()) // Trim spaces
+                              .Where(n => !string.IsNullOrEmpty(n)) // Remove empty entries
+                              .ElementAtOrDefault(index) // Get name at the current index
+                })
+                .ToList();
+
+            return Json(new { success = jobDetails != null, jobDetails, alumnis, requiredAttachments }, JsonRequestBehavior.AllowGet);
         }
 
         private JobAttachmentDTO SaveAttachment(HttpPostedFileBase file, int alumniId, Guid jobId, byte attachmentType)
@@ -182,16 +228,10 @@ namespace ExamWeb.Controllers
                 AttachmentTypeID = attachmentType,
                 FilePath = "/Uploads/" + uniqueFileName,
                 FileName = file.FileName,
-                ApplyDate = DateTime.Now
+                //ApplyDate = DateTime.Now
             };
         }
 
-
-        // GET: JobPosting/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
 
         // POST: JobPosting/Create
         [HttpPost]
@@ -248,12 +288,7 @@ namespace ExamWeb.Controllers
             }
             return View(jobPosting);
         }
-
-        // GET: JobPosting/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+        //------------------------------------------------------------------------------------------------------------------------------------------------------
 
         // POST: JobPosting/Delete/5
         [HttpPost]

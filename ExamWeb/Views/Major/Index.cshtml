@@ -11,23 +11,44 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
         .table-container {
-            max-width: 1200px;
-            margin: auto;
-            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin: 0 auto;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        #majorData {
-            width: 100% !important;
-            table-layout: auto;
+        /* Atur tampilan tabel agar responsif */
+        .dataTables_wrapper {
+            width: 100%;
+            max-width: 1200px; /* Atur sesuai kebutuhan */
+            margin: 0 auto;
         }
 
-            #majorData th, #majorData td {
-                white-space: nowrap;
-                text-align: center;
-            }
+        /* Pastikan tabel menyesuaikan layar */
+        table.dataTable {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Penyesuaian untuk pagination & informasi */
+        .dataTables_wrapper .dataTables_paginate {
+            float: none;
+            text-align: center;
+        }
+
+        .dataTables_wrapper .dataTables_info {
+            float: left;
+            padding-top: 0.755em;
+        }
+
+        .dataTables_wrapper .bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
     </style>
 }
 

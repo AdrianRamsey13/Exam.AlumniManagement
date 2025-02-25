@@ -13,7 +13,7 @@
             <p><strong>Min. Experience:</strong> @ViewBag.MinExperience years</p>
             <p><strong>Skills:</strong> @ViewBag.Skills</p>
 
-            <form id="applyForm" method="post" enctype="multipart/form-data" action="@Url.Action("CreateApplyJob", "JobPosting", new {jobId = ViewBag.JobID})">
+            <form id="applyForm" method="post" enctype="multipart/form-data" action="@Url.Action("ApplyToJob", "JobPosting", new {jobId = ViewBag.JobID})">
                 @Html.AntiForgeryToken()
 
                 <!-- Alumni Dropdown -->
@@ -42,43 +42,6 @@
                         </div>
                     }
                 </div>
-
-                <!--<div class="row">-->
-                    <!-- CV Upload -->
-                    <!--<div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="cv" class="form-label">Curriculum Vitae</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="bi bi-file-earmark-text"></i></span>
-                                <input type="file" class="form-control" id="cv" name="cv">
-                            </div>
-                        </div>
-                    </div>-->
-
-                    <!-- Identity Card Upload -->
-                    <!--<div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="id-card" class="form-label">Identity Card</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="bi bi-credit-card"></i></span>
-                                <input type="file" class="form-control" id="idCard" name="idCard">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">-->
-                    <!-- Certificate Upload -->
-                    <!--<div class="col-md-12">
-                        <div class="mb-3">
-                            <label for="certificate" class="form-label">Certificate</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="bi bi-award"></i></span>
-                                <input type="file" class="form-control" id="certificate" name="certificate">
-                            </div>
-                        </div>
-                    </div>
-                </div>-->
 
                 <!-- Buttons -->
                 <div class="d-flex justify-content-end gap-2">

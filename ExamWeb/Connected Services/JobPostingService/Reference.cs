@@ -26,6 +26,9 @@ namespace ExamWeb.JobPostingService {
         private string AttachmentTypeDisplayField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int CandidatesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CompanyField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -62,6 +65,9 @@ namespace ExamWeb.JobPostingService {
         private int[] SelectedAttachmentTypesField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int[] SelectedCandidatesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int[] SelectedJobAttachmentsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -72,6 +78,9 @@ namespace ExamWeb.JobPostingService {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string TitleField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int TotalCandidatesField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -92,6 +101,19 @@ namespace ExamWeb.JobPostingService {
                 if ((object.ReferenceEquals(this.AttachmentTypeDisplayField, value) != true)) {
                     this.AttachmentTypeDisplayField = value;
                     this.RaisePropertyChanged("AttachmentTypeDisplay");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Candidates {
+            get {
+                return this.CandidatesField;
+            }
+            set {
+                if ((this.CandidatesField.Equals(value) != true)) {
+                    this.CandidatesField = value;
+                    this.RaisePropertyChanged("Candidates");
                 }
             }
         }
@@ -253,6 +275,19 @@ namespace ExamWeb.JobPostingService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public int[] SelectedCandidates {
+            get {
+                return this.SelectedCandidatesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SelectedCandidatesField, value) != true)) {
+                    this.SelectedCandidatesField = value;
+                    this.RaisePropertyChanged("SelectedCandidates");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public int[] SelectedJobAttachments {
             get {
                 return this.SelectedJobAttachmentsField;
@@ -304,252 +339,15 @@ namespace ExamWeb.JobPostingService {
             }
         }
         
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="JobCandidateDTO", Namespace="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs")]
-    [System.SerializableAttribute()]
-    public partial class JobCandidateDTO : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int AlumniIDField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime ApplyDateField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Guid JobIDField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int AlumniID {
+        public int TotalCandidates {
             get {
-                return this.AlumniIDField;
+                return this.TotalCandidatesField;
             }
             set {
-                if ((this.AlumniIDField.Equals(value) != true)) {
-                    this.AlumniIDField = value;
-                    this.RaisePropertyChanged("AlumniID");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime ApplyDate {
-            get {
-                return this.ApplyDateField;
-            }
-            set {
-                if ((this.ApplyDateField.Equals(value) != true)) {
-                    this.ApplyDateField = value;
-                    this.RaisePropertyChanged("ApplyDate");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Guid JobID {
-            get {
-                return this.JobIDField;
-            }
-            set {
-                if ((this.JobIDField.Equals(value) != true)) {
-                    this.JobIDField = value;
-                    this.RaisePropertyChanged("JobID");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="JobAttachmentDTO", Namespace="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs")]
-    [System.SerializableAttribute()]
-    public partial class JobAttachmentDTO : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int AlumniIDField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string AlumniNameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime ApplyDateField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int AttachmentIDField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private byte AttachmentTypeIDField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string FileNameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string FilePathField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string FullNameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Guid JobIDField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int AlumniID {
-            get {
-                return this.AlumniIDField;
-            }
-            set {
-                if ((this.AlumniIDField.Equals(value) != true)) {
-                    this.AlumniIDField = value;
-                    this.RaisePropertyChanged("AlumniID");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string AlumniName {
-            get {
-                return this.AlumniNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.AlumniNameField, value) != true)) {
-                    this.AlumniNameField = value;
-                    this.RaisePropertyChanged("AlumniName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime ApplyDate {
-            get {
-                return this.ApplyDateField;
-            }
-            set {
-                if ((this.ApplyDateField.Equals(value) != true)) {
-                    this.ApplyDateField = value;
-                    this.RaisePropertyChanged("ApplyDate");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int AttachmentID {
-            get {
-                return this.AttachmentIDField;
-            }
-            set {
-                if ((this.AttachmentIDField.Equals(value) != true)) {
-                    this.AttachmentIDField = value;
-                    this.RaisePropertyChanged("AttachmentID");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public byte AttachmentTypeID {
-            get {
-                return this.AttachmentTypeIDField;
-            }
-            set {
-                if ((this.AttachmentTypeIDField.Equals(value) != true)) {
-                    this.AttachmentTypeIDField = value;
-                    this.RaisePropertyChanged("AttachmentTypeID");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string FileName {
-            get {
-                return this.FileNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.FileNameField, value) != true)) {
-                    this.FileNameField = value;
-                    this.RaisePropertyChanged("FileName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string FilePath {
-            get {
-                return this.FilePathField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.FilePathField, value) != true)) {
-                    this.FilePathField = value;
-                    this.RaisePropertyChanged("FilePath");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string FullName {
-            get {
-                return this.FullNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.FullNameField, value) != true)) {
-                    this.FullNameField = value;
-                    this.RaisePropertyChanged("FullName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Guid JobID {
-            get {
-                return this.JobIDField;
-            }
-            set {
-                if ((this.JobIDField.Equals(value) != true)) {
-                    this.JobIDField = value;
-                    this.RaisePropertyChanged("JobID");
+                if ((this.TotalCandidatesField.Equals(value) != true)) {
+                    this.TotalCandidatesField = value;
+                    this.RaisePropertyChanged("TotalCandidates");
                 }
             }
         }
@@ -779,6 +577,288 @@ namespace ExamWeb.JobPostingService {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="JobAttachmentDTO", Namespace="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs")]
+    [System.SerializableAttribute()]
+    public partial class JobAttachmentDTO : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int AlumniIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string AlumniNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int AttachmentIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string AttachmentTypeDisplayField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private byte AttachmentTypeIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FileNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FilePathField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid JobIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int[] SelectedAttachmentTypesField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int AlumniID {
+            get {
+                return this.AlumniIDField;
+            }
+            set {
+                if ((this.AlumniIDField.Equals(value) != true)) {
+                    this.AlumniIDField = value;
+                    this.RaisePropertyChanged("AlumniID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string AlumniName {
+            get {
+                return this.AlumniNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AlumniNameField, value) != true)) {
+                    this.AlumniNameField = value;
+                    this.RaisePropertyChanged("AlumniName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int AttachmentID {
+            get {
+                return this.AttachmentIDField;
+            }
+            set {
+                if ((this.AttachmentIDField.Equals(value) != true)) {
+                    this.AttachmentIDField = value;
+                    this.RaisePropertyChanged("AttachmentID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string AttachmentTypeDisplay {
+            get {
+                return this.AttachmentTypeDisplayField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AttachmentTypeDisplayField, value) != true)) {
+                    this.AttachmentTypeDisplayField = value;
+                    this.RaisePropertyChanged("AttachmentTypeDisplay");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public byte AttachmentTypeID {
+            get {
+                return this.AttachmentTypeIDField;
+            }
+            set {
+                if ((this.AttachmentTypeIDField.Equals(value) != true)) {
+                    this.AttachmentTypeIDField = value;
+                    this.RaisePropertyChanged("AttachmentTypeID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string FileName {
+            get {
+                return this.FileNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FileNameField, value) != true)) {
+                    this.FileNameField = value;
+                    this.RaisePropertyChanged("FileName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string FilePath {
+            get {
+                return this.FilePathField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FilePathField, value) != true)) {
+                    this.FilePathField = value;
+                    this.RaisePropertyChanged("FilePath");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid JobID {
+            get {
+                return this.JobIDField;
+            }
+            set {
+                if ((this.JobIDField.Equals(value) != true)) {
+                    this.JobIDField = value;
+                    this.RaisePropertyChanged("JobID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int[] SelectedAttachmentTypes {
+            get {
+                return this.SelectedAttachmentTypesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SelectedAttachmentTypesField, value) != true)) {
+                    this.SelectedAttachmentTypesField = value;
+                    this.RaisePropertyChanged("SelectedAttachmentTypes");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="JobCandidateDTO", Namespace="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs")]
+    [System.SerializableAttribute()]
+    public partial class JobCandidateDTO : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int AlumniIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime ApplyDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FullNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private ExamWeb.JobPostingService.JobAttachmentDTO[] JobAttachmentsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid JobIDField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int AlumniID {
+            get {
+                return this.AlumniIDField;
+            }
+            set {
+                if ((this.AlumniIDField.Equals(value) != true)) {
+                    this.AlumniIDField = value;
+                    this.RaisePropertyChanged("AlumniID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime ApplyDate {
+            get {
+                return this.ApplyDateField;
+            }
+            set {
+                if ((this.ApplyDateField.Equals(value) != true)) {
+                    this.ApplyDateField = value;
+                    this.RaisePropertyChanged("ApplyDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string FullName {
+            get {
+                return this.FullNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FullNameField, value) != true)) {
+                    this.FullNameField = value;
+                    this.RaisePropertyChanged("FullName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public ExamWeb.JobPostingService.JobAttachmentDTO[] JobAttachments {
+            get {
+                return this.JobAttachmentsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.JobAttachmentsField, value) != true)) {
+                    this.JobAttachmentsField = value;
+                    this.RaisePropertyChanged("JobAttachments");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid JobID {
+            get {
+                return this.JobIDField;
+            }
+            set {
+                if ((this.JobIDField.Equals(value) != true)) {
+                    this.JobIDField = value;
+                    this.RaisePropertyChanged("JobID");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="JobPostingService.IJobPostingService")]
     public interface IJobPostingService {
@@ -789,59 +869,11 @@ namespace ExamWeb.JobPostingService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetJobPostings", ReplyAction="http://tempuri.org/IJobPostingService/GetJobPostingsResponse")]
         System.Threading.Tasks.Task<ExamWeb.JobPostingService.JobPostingDTO[]> GetJobPostingsAsync();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetJobPostingByID", ReplyAction="http://tempuri.org/IJobPostingService/GetJobPostingByIDResponse")]
-        ExamWeb.JobPostingService.JobPostingDTO GetJobPostingByID(System.Guid id);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetJobPostingByID", ReplyAction="http://tempuri.org/IJobPostingService/GetJobPostingByIDResponse")]
-        System.Threading.Tasks.Task<ExamWeb.JobPostingService.JobPostingDTO> GetJobPostingByIDAsync(System.Guid id);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/UpsertJobPosting", ReplyAction="http://tempuri.org/IJobPostingService/UpsertJobPostingResponse")]
-        void UpsertJobPosting(ExamWeb.JobPostingService.JobPostingDTO jobPostingDTO);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/UpsertJobPosting", ReplyAction="http://tempuri.org/IJobPostingService/UpsertJobPostingResponse")]
-        System.Threading.Tasks.Task UpsertJobPostingAsync(ExamWeb.JobPostingService.JobPostingDTO jobPostingDTO);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/InsertJobPosting", ReplyAction="http://tempuri.org/IJobPostingService/InsertJobPostingResponse")]
-        void InsertJobPosting(ExamWeb.JobPostingService.JobPostingDTO jobPostingDTO);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/InsertJobPosting", ReplyAction="http://tempuri.org/IJobPostingService/InsertJobPostingResponse")]
-        System.Threading.Tasks.Task InsertJobPostingAsync(ExamWeb.JobPostingService.JobPostingDTO jobPostingDTO);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/InsertJobApply", ReplyAction="http://tempuri.org/IJobPostingService/InsertJobApplyResponse")]
-        void InsertJobApply(ExamWeb.JobPostingService.JobCandidateDTO jobCandidate);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/InsertJobApply", ReplyAction="http://tempuri.org/IJobPostingService/InsertJobApplyResponse")]
-        System.Threading.Tasks.Task InsertJobApplyAsync(ExamWeb.JobPostingService.JobCandidateDTO jobCandidate);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/InsertJobAttachments", ReplyAction="http://tempuri.org/IJobPostingService/InsertJobAttachmentsResponse")]
-        void InsertJobAttachments(ExamWeb.JobPostingService.JobAttachmentDTO[] attachments);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/InsertJobAttachments", ReplyAction="http://tempuri.org/IJobPostingService/InsertJobAttachmentsResponse")]
-        System.Threading.Tasks.Task InsertJobAttachmentsAsync(ExamWeb.JobPostingService.JobAttachmentDTO[] attachments);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/UpdateJobPosting", ReplyAction="http://tempuri.org/IJobPostingService/UpdateJobPostingResponse")]
-        void UpdateJobPosting(ExamWeb.JobPostingService.JobPostingDTO jobPostingDTO);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/UpdateJobPosting", ReplyAction="http://tempuri.org/IJobPostingService/UpdateJobPostingResponse")]
-        System.Threading.Tasks.Task UpdateJobPostingAsync(ExamWeb.JobPostingService.JobPostingDTO jobPostingDTO);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/DeleteJobPosting", ReplyAction="http://tempuri.org/IJobPostingService/DeleteJobPostingResponse")]
-        void DeleteJobPosting(System.Guid id);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/DeleteJobPosting", ReplyAction="http://tempuri.org/IJobPostingService/DeleteJobPostingResponse")]
-        System.Threading.Tasks.Task DeleteJobPostingAsync(System.Guid id);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetSkills", ReplyAction="http://tempuri.org/IJobPostingService/GetSkillsResponse")]
         ExamWeb.JobPostingService.SkillsDTO[] GetSkills();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetSkills", ReplyAction="http://tempuri.org/IJobPostingService/GetSkillsResponse")]
         System.Threading.Tasks.Task<ExamWeb.JobPostingService.SkillsDTO[]> GetSkillsAsync();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetSkillIDByName", ReplyAction="http://tempuri.org/IJobPostingService/GetSkillIDByNameResponse")]
-        int GetSkillIDByName(string skillName);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetSkillIDByName", ReplyAction="http://tempuri.org/IJobPostingService/GetSkillIDByNameResponse")]
-        System.Threading.Tasks.Task<int> GetSkillIDByNameAsync(string skillName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetEmploymentTypes", ReplyAction="http://tempuri.org/IJobPostingService/GetEmploymentTypesResponse")]
         ExamWeb.JobPostingService.EmploymentTypeDTO[] GetEmploymentTypes();
@@ -849,23 +881,23 @@ namespace ExamWeb.JobPostingService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetEmploymentTypes", ReplyAction="http://tempuri.org/IJobPostingService/GetEmploymentTypesResponse")]
         System.Threading.Tasks.Task<ExamWeb.JobPostingService.EmploymentTypeDTO[]> GetEmploymentTypesAsync();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetEmploymentTypeIDByName", ReplyAction="http://tempuri.org/IJobPostingService/GetEmploymentTypeIDByNameResponse")]
-        int GetEmploymentTypeIDByName(string employmentTypeName);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetEmploymentTypeIDByName", ReplyAction="http://tempuri.org/IJobPostingService/GetEmploymentTypeIDByNameResponse")]
-        System.Threading.Tasks.Task<int> GetEmploymentTypeIDByNameAsync(string employmentTypeName);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetAttachmentTypes", ReplyAction="http://tempuri.org/IJobPostingService/GetAttachmentTypesResponse")]
         ExamWeb.JobPostingService.AttachmentTypeDTO[] GetAttachmentTypes();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetAttachmentTypes", ReplyAction="http://tempuri.org/IJobPostingService/GetAttachmentTypesResponse")]
         System.Threading.Tasks.Task<ExamWeb.JobPostingService.AttachmentTypeDTO[]> GetAttachmentTypesAsync();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetAttachmentTypeIDByName", ReplyAction="http://tempuri.org/IJobPostingService/GetAttachmentTypeIDByNameResponse")]
-        int GetAttachmentTypeIDByName(string attachmentTypeName);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetJobAttachments", ReplyAction="http://tempuri.org/IJobPostingService/GetJobAttachmentsResponse")]
+        ExamWeb.JobPostingService.JobAttachmentDTO[] GetJobAttachments();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetAttachmentTypeIDByName", ReplyAction="http://tempuri.org/IJobPostingService/GetAttachmentTypeIDByNameResponse")]
-        System.Threading.Tasks.Task<int> GetAttachmentTypeIDByNameAsync(string attachmentTypeName);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetJobAttachments", ReplyAction="http://tempuri.org/IJobPostingService/GetJobAttachmentsResponse")]
+        System.Threading.Tasks.Task<ExamWeb.JobPostingService.JobAttachmentDTO[]> GetJobAttachmentsAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetJobPostingByID", ReplyAction="http://tempuri.org/IJobPostingService/GetJobPostingByIDResponse")]
+        ExamWeb.JobPostingService.JobPostingDTO GetJobPostingByID(System.Guid jobPostingID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetJobPostingByID", ReplyAction="http://tempuri.org/IJobPostingService/GetJobPostingByIDResponse")]
+        System.Threading.Tasks.Task<ExamWeb.JobPostingService.JobPostingDTO> GetJobPostingByIDAsync(System.Guid jobPostingID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetSkillByID", ReplyAction="http://tempuri.org/IJobPostingService/GetSkillByIDResponse")]
         ExamWeb.JobPostingService.SkillsDTO GetSkillByID(int skillID);
@@ -890,6 +922,48 @@ namespace ExamWeb.JobPostingService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetJobAttachmentByID", ReplyAction="http://tempuri.org/IJobPostingService/GetJobAttachmentByIDResponse")]
         System.Threading.Tasks.Task<ExamWeb.JobPostingService.JobAttachmentDTO> GetJobAttachmentByIDAsync(int attachmentID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/InsertJobPosting", ReplyAction="http://tempuri.org/IJobPostingService/InsertJobPostingResponse")]
+        void InsertJobPosting(ExamWeb.JobPostingService.JobPostingDTO jobPosting);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/InsertJobPosting", ReplyAction="http://tempuri.org/IJobPostingService/InsertJobPostingResponse")]
+        System.Threading.Tasks.Task InsertJobPostingAsync(ExamWeb.JobPostingService.JobPostingDTO jobPosting);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/UpdateJobPosting", ReplyAction="http://tempuri.org/IJobPostingService/UpdateJobPostingResponse")]
+        void UpdateJobPosting(ExamWeb.JobPostingService.JobPostingDTO jobPosting);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/UpdateJobPosting", ReplyAction="http://tempuri.org/IJobPostingService/UpdateJobPostingResponse")]
+        System.Threading.Tasks.Task UpdateJobPostingAsync(ExamWeb.JobPostingService.JobPostingDTO jobPosting);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/DeleteJobPosting", ReplyAction="http://tempuri.org/IJobPostingService/DeleteJobPostingResponse")]
+        void DeleteJobPosting(System.Guid jobPostingID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/DeleteJobPosting", ReplyAction="http://tempuri.org/IJobPostingService/DeleteJobPostingResponse")]
+        System.Threading.Tasks.Task DeleteJobPostingAsync(System.Guid jobPostingID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/ApplyToJob", ReplyAction="http://tempuri.org/IJobPostingService/ApplyToJobResponse")]
+        void ApplyToJob(ExamWeb.JobPostingService.JobAttachmentDTO applyJob);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/ApplyToJob", ReplyAction="http://tempuri.org/IJobPostingService/ApplyToJobResponse")]
+        System.Threading.Tasks.Task ApplyToJobAsync(ExamWeb.JobPostingService.JobAttachmentDTO applyJob);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/InsertJobCandidate", ReplyAction="http://tempuri.org/IJobPostingService/InsertJobCandidateResponse")]
+        void InsertJobCandidate(ExamWeb.JobPostingService.JobCandidateDTO jobCandidate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/InsertJobCandidate", ReplyAction="http://tempuri.org/IJobPostingService/InsertJobCandidateResponse")]
+        System.Threading.Tasks.Task InsertJobCandidateAsync(ExamWeb.JobPostingService.JobCandidateDTO jobCandidate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/UpsertJobPosting", ReplyAction="http://tempuri.org/IJobPostingService/UpsertJobPostingResponse")]
+        void UpsertJobPosting(ExamWeb.JobPostingService.JobPostingDTO jobPosting);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/UpsertJobPosting", ReplyAction="http://tempuri.org/IJobPostingService/UpsertJobPostingResponse")]
+        System.Threading.Tasks.Task UpsertJobPostingAsync(ExamWeb.JobPostingService.JobPostingDTO jobPosting);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetAllCandidateByJobID", ReplyAction="http://tempuri.org/IJobPostingService/GetAllCandidateByJobIDResponse")]
+        ExamWeb.JobPostingService.JobCandidateDTO[] GetAllCandidateByJobID(System.Guid jobID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IJobPostingService/GetAllCandidateByJobID", ReplyAction="http://tempuri.org/IJobPostingService/GetAllCandidateByJobIDResponse")]
+        System.Threading.Tasks.Task<ExamWeb.JobPostingService.JobCandidateDTO[]> GetAllCandidateByJobIDAsync(System.Guid jobID);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -927,76 +1001,12 @@ namespace ExamWeb.JobPostingService {
             return base.Channel.GetJobPostingsAsync();
         }
         
-        public ExamWeb.JobPostingService.JobPostingDTO GetJobPostingByID(System.Guid id) {
-            return base.Channel.GetJobPostingByID(id);
-        }
-        
-        public System.Threading.Tasks.Task<ExamWeb.JobPostingService.JobPostingDTO> GetJobPostingByIDAsync(System.Guid id) {
-            return base.Channel.GetJobPostingByIDAsync(id);
-        }
-        
-        public void UpsertJobPosting(ExamWeb.JobPostingService.JobPostingDTO jobPostingDTO) {
-            base.Channel.UpsertJobPosting(jobPostingDTO);
-        }
-        
-        public System.Threading.Tasks.Task UpsertJobPostingAsync(ExamWeb.JobPostingService.JobPostingDTO jobPostingDTO) {
-            return base.Channel.UpsertJobPostingAsync(jobPostingDTO);
-        }
-        
-        public void InsertJobPosting(ExamWeb.JobPostingService.JobPostingDTO jobPostingDTO) {
-            base.Channel.InsertJobPosting(jobPostingDTO);
-        }
-        
-        public System.Threading.Tasks.Task InsertJobPostingAsync(ExamWeb.JobPostingService.JobPostingDTO jobPostingDTO) {
-            return base.Channel.InsertJobPostingAsync(jobPostingDTO);
-        }
-        
-        public void InsertJobApply(ExamWeb.JobPostingService.JobCandidateDTO jobCandidate) {
-            base.Channel.InsertJobApply(jobCandidate);
-        }
-        
-        public System.Threading.Tasks.Task InsertJobApplyAsync(ExamWeb.JobPostingService.JobCandidateDTO jobCandidate) {
-            return base.Channel.InsertJobApplyAsync(jobCandidate);
-        }
-        
-        public void InsertJobAttachments(ExamWeb.JobPostingService.JobAttachmentDTO[] attachments) {
-            base.Channel.InsertJobAttachments(attachments);
-        }
-        
-        public System.Threading.Tasks.Task InsertJobAttachmentsAsync(ExamWeb.JobPostingService.JobAttachmentDTO[] attachments) {
-            return base.Channel.InsertJobAttachmentsAsync(attachments);
-        }
-        
-        public void UpdateJobPosting(ExamWeb.JobPostingService.JobPostingDTO jobPostingDTO) {
-            base.Channel.UpdateJobPosting(jobPostingDTO);
-        }
-        
-        public System.Threading.Tasks.Task UpdateJobPostingAsync(ExamWeb.JobPostingService.JobPostingDTO jobPostingDTO) {
-            return base.Channel.UpdateJobPostingAsync(jobPostingDTO);
-        }
-        
-        public void DeleteJobPosting(System.Guid id) {
-            base.Channel.DeleteJobPosting(id);
-        }
-        
-        public System.Threading.Tasks.Task DeleteJobPostingAsync(System.Guid id) {
-            return base.Channel.DeleteJobPostingAsync(id);
-        }
-        
         public ExamWeb.JobPostingService.SkillsDTO[] GetSkills() {
             return base.Channel.GetSkills();
         }
         
         public System.Threading.Tasks.Task<ExamWeb.JobPostingService.SkillsDTO[]> GetSkillsAsync() {
             return base.Channel.GetSkillsAsync();
-        }
-        
-        public int GetSkillIDByName(string skillName) {
-            return base.Channel.GetSkillIDByName(skillName);
-        }
-        
-        public System.Threading.Tasks.Task<int> GetSkillIDByNameAsync(string skillName) {
-            return base.Channel.GetSkillIDByNameAsync(skillName);
         }
         
         public ExamWeb.JobPostingService.EmploymentTypeDTO[] GetEmploymentTypes() {
@@ -1007,14 +1017,6 @@ namespace ExamWeb.JobPostingService {
             return base.Channel.GetEmploymentTypesAsync();
         }
         
-        public int GetEmploymentTypeIDByName(string employmentTypeName) {
-            return base.Channel.GetEmploymentTypeIDByName(employmentTypeName);
-        }
-        
-        public System.Threading.Tasks.Task<int> GetEmploymentTypeIDByNameAsync(string employmentTypeName) {
-            return base.Channel.GetEmploymentTypeIDByNameAsync(employmentTypeName);
-        }
-        
         public ExamWeb.JobPostingService.AttachmentTypeDTO[] GetAttachmentTypes() {
             return base.Channel.GetAttachmentTypes();
         }
@@ -1023,12 +1025,20 @@ namespace ExamWeb.JobPostingService {
             return base.Channel.GetAttachmentTypesAsync();
         }
         
-        public int GetAttachmentTypeIDByName(string attachmentTypeName) {
-            return base.Channel.GetAttachmentTypeIDByName(attachmentTypeName);
+        public ExamWeb.JobPostingService.JobAttachmentDTO[] GetJobAttachments() {
+            return base.Channel.GetJobAttachments();
         }
         
-        public System.Threading.Tasks.Task<int> GetAttachmentTypeIDByNameAsync(string attachmentTypeName) {
-            return base.Channel.GetAttachmentTypeIDByNameAsync(attachmentTypeName);
+        public System.Threading.Tasks.Task<ExamWeb.JobPostingService.JobAttachmentDTO[]> GetJobAttachmentsAsync() {
+            return base.Channel.GetJobAttachmentsAsync();
+        }
+        
+        public ExamWeb.JobPostingService.JobPostingDTO GetJobPostingByID(System.Guid jobPostingID) {
+            return base.Channel.GetJobPostingByID(jobPostingID);
+        }
+        
+        public System.Threading.Tasks.Task<ExamWeb.JobPostingService.JobPostingDTO> GetJobPostingByIDAsync(System.Guid jobPostingID) {
+            return base.Channel.GetJobPostingByIDAsync(jobPostingID);
         }
         
         public ExamWeb.JobPostingService.SkillsDTO GetSkillByID(int skillID) {
@@ -1061,6 +1071,62 @@ namespace ExamWeb.JobPostingService {
         
         public System.Threading.Tasks.Task<ExamWeb.JobPostingService.JobAttachmentDTO> GetJobAttachmentByIDAsync(int attachmentID) {
             return base.Channel.GetJobAttachmentByIDAsync(attachmentID);
+        }
+        
+        public void InsertJobPosting(ExamWeb.JobPostingService.JobPostingDTO jobPosting) {
+            base.Channel.InsertJobPosting(jobPosting);
+        }
+        
+        public System.Threading.Tasks.Task InsertJobPostingAsync(ExamWeb.JobPostingService.JobPostingDTO jobPosting) {
+            return base.Channel.InsertJobPostingAsync(jobPosting);
+        }
+        
+        public void UpdateJobPosting(ExamWeb.JobPostingService.JobPostingDTO jobPosting) {
+            base.Channel.UpdateJobPosting(jobPosting);
+        }
+        
+        public System.Threading.Tasks.Task UpdateJobPostingAsync(ExamWeb.JobPostingService.JobPostingDTO jobPosting) {
+            return base.Channel.UpdateJobPostingAsync(jobPosting);
+        }
+        
+        public void DeleteJobPosting(System.Guid jobPostingID) {
+            base.Channel.DeleteJobPosting(jobPostingID);
+        }
+        
+        public System.Threading.Tasks.Task DeleteJobPostingAsync(System.Guid jobPostingID) {
+            return base.Channel.DeleteJobPostingAsync(jobPostingID);
+        }
+        
+        public void ApplyToJob(ExamWeb.JobPostingService.JobAttachmentDTO applyJob) {
+            base.Channel.ApplyToJob(applyJob);
+        }
+        
+        public System.Threading.Tasks.Task ApplyToJobAsync(ExamWeb.JobPostingService.JobAttachmentDTO applyJob) {
+            return base.Channel.ApplyToJobAsync(applyJob);
+        }
+        
+        public void InsertJobCandidate(ExamWeb.JobPostingService.JobCandidateDTO jobCandidate) {
+            base.Channel.InsertJobCandidate(jobCandidate);
+        }
+        
+        public System.Threading.Tasks.Task InsertJobCandidateAsync(ExamWeb.JobPostingService.JobCandidateDTO jobCandidate) {
+            return base.Channel.InsertJobCandidateAsync(jobCandidate);
+        }
+        
+        public void UpsertJobPosting(ExamWeb.JobPostingService.JobPostingDTO jobPosting) {
+            base.Channel.UpsertJobPosting(jobPosting);
+        }
+        
+        public System.Threading.Tasks.Task UpsertJobPostingAsync(ExamWeb.JobPostingService.JobPostingDTO jobPosting) {
+            return base.Channel.UpsertJobPostingAsync(jobPosting);
+        }
+        
+        public ExamWeb.JobPostingService.JobCandidateDTO[] GetAllCandidateByJobID(System.Guid jobID) {
+            return base.Channel.GetAllCandidateByJobID(jobID);
+        }
+        
+        public System.Threading.Tasks.Task<ExamWeb.JobPostingService.JobCandidateDTO[]> GetAllCandidateByJobIDAsync(System.Guid jobID) {
+            return base.Channel.GetAllCandidateByJobIDAsync(jobID);
         }
     }
 }

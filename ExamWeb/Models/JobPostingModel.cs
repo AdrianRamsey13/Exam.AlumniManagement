@@ -46,7 +46,11 @@ namespace ExamWeb.Models
 
         [DisplayName("Remarks")]
         public bool? IsClosed { get; set; }
+
+        [Required(ErrorMessage = "Skills Required")]
         public List<int> SelectedSkills { get; set; } = new List<int>();
+
+        [Required(ErrorMessage = "Attachmemnts Required")]
         public List<int> SelectedAttachmentTypes { get; set; } = new List<int>();
         public List<int> SelectedJobAttachments { get; set; } = new List<int>();
         public IEnumerable<SelectListItem> EmploymentTypes { get; set; }
@@ -67,5 +71,8 @@ namespace ExamWeb.Models
             get { return IsClosed ?? false; }
             set { IsClosed = value; }
         }
+
+        public int Candidates { get; set; }
+        public int TotalCandidates { get; set; }
     }
 }

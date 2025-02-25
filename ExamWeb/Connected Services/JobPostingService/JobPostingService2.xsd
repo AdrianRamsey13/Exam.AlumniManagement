@@ -14,92 +14,6 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetJobPostingByID">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="id" type="q2:guid" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetJobPostingByIDResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="GetJobPostingByIDResult" nillable="true" type="q3:JobPostingDTO" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="UpsertJobPosting">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="jobPostingDTO" nillable="true" type="q4:JobPostingDTO" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="UpsertJobPostingResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="InsertJobPosting">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="jobPostingDTO" nillable="true" type="q5:JobPostingDTO" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="InsertJobPostingResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="InsertJobApply">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="jobCandidate" nillable="true" type="q6:JobCandidateDTO" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="InsertJobApplyResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="InsertJobAttachments">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="attachments" nillable="true" type="q7:ArrayOfJobAttachmentDTO" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="InsertJobAttachmentsResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="UpdateJobPosting">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="jobPostingDTO" nillable="true" type="q8:JobPostingDTO" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="UpdateJobPostingResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="DeleteJobPosting">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="id" type="q9:guid" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="DeleteJobPostingResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
   <xs:element name="GetSkills">
     <xs:complexType>
       <xs:sequence />
@@ -108,21 +22,7 @@
   <xs:element name="GetSkillsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="GetSkillsResult" nillable="true" type="q10:ArrayOfSkillsDTO" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetSkillIDByName">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="skillName" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetSkillIDByNameResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetSkillIDByNameResult" type="xs:int" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="GetSkillsResult" nillable="true" type="q2:ArrayOfSkillsDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -134,21 +34,7 @@
   <xs:element name="GetEmploymentTypesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="GetEmploymentTypesResult" nillable="true" type="q11:ArrayOfEmploymentTypeDTO" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetEmploymentTypeIDByName">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="employmentTypeName" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetEmploymentTypeIDByNameResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetEmploymentTypeIDByNameResult" type="xs:int" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="GetEmploymentTypesResult" nillable="true" type="q3:ArrayOfEmploymentTypeDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -160,21 +46,33 @@
   <xs:element name="GetAttachmentTypesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="GetAttachmentTypesResult" nillable="true" type="q12:ArrayOfAttachmentTypeDTO" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="GetAttachmentTypesResult" nillable="true" type="q4:ArrayOfAttachmentTypeDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetAttachmentTypeIDByName">
+  <xs:element name="GetJobAttachments">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetJobAttachmentsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="attachmentTypeName" nillable="true" type="xs:string" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="GetJobAttachmentsResult" nillable="true" type="q5:ArrayOfJobAttachmentDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetAttachmentTypeIDByNameResponse">
+  <xs:element name="GetJobPostingByID">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="GetAttachmentTypeIDByNameResult" type="xs:int" />
+        <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="jobPostingID" type="q6:guid" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetJobPostingByIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="GetJobPostingByIDResult" nillable="true" type="q7:JobPostingDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -188,7 +86,7 @@
   <xs:element name="GetSkillByIDResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="GetSkillByIDResult" nillable="true" type="q13:SkillsDTO" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="GetSkillByIDResult" nillable="true" type="q8:SkillsDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -202,7 +100,7 @@
   <xs:element name="GetEmploymentTypeByIDResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="GetEmploymentTypeByIDResult" nillable="true" type="q14:EmploymentTypeDTO" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="GetEmploymentTypeByIDResult" nillable="true" type="q9:EmploymentTypeDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -216,7 +114,7 @@
   <xs:element name="GetAttachmentTypeByIDResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="GetAttachmentTypeByIDResult" nillable="true" type="q15:AttachmentTypeDTO" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="GetAttachmentTypeByIDResult" nillable="true" type="q10:AttachmentTypeDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -230,7 +128,93 @@
   <xs:element name="GetJobAttachmentByIDResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="GetJobAttachmentByIDResult" nillable="true" type="q16:JobAttachmentDTO" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="GetJobAttachmentByIDResult" nillable="true" type="q11:JobAttachmentDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InsertJobPosting">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="jobPosting" nillable="true" type="q12:JobPostingDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InsertJobPostingResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateJobPosting">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="jobPosting" nillable="true" type="q13:JobPostingDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateJobPostingResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteJobPosting">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q14="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="jobPostingID" type="q14:guid" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteJobPostingResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ApplyToJob">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="applyJob" nillable="true" type="q15:JobAttachmentDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ApplyToJobResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InsertJobCandidate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="jobCandidate" nillable="true" type="q16:JobCandidateDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InsertJobCandidateResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpsertJobPosting">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="jobPosting" nillable="true" type="q17:JobPostingDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpsertJobPostingResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllCandidateByJobID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q18="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="jobID" type="q18:guid" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllCandidateByJobIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="GetAllCandidateByJobIDResult" nillable="true" type="q19:ArrayOfJobCandidateDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

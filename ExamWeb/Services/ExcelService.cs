@@ -238,6 +238,7 @@ namespace ExamWeb.Services
 
             int mobileNumberColumnIndex = 5;
             CellArea mobileNumberArea = CellArea.CreateCellArea(1, mobileNumberColumnIndex, 1000, mobileNumberColumnIndex);
+            // Validasi panjang karakter (1-15)
             Validation mobileNumberValidation = workSheet.Validations[workSheet.Validations.Add(mobileNumberArea)];
             mobileNumberValidation.Type = ValidationType.TextLength;
             mobileNumberValidation.Operator = OperatorType.Between;
@@ -246,7 +247,17 @@ namespace ExamWeb.Services
             mobileNumberValidation.ShowError = true;
             mobileNumberValidation.AlertStyle = ValidationAlertType.Stop;
             mobileNumberValidation.ErrorTitle = "Invalid input";
-            mobileNumberValidation.ErrorMessage = "Mobile number must be between 1 and 15 characters";
+            mobileNumberValidation.ErrorMessage = "Mobile number must be between 1 and 15 characters.";
+
+            // Validasi hanya angka (whole number)
+            Validation numberOnlyValidation = workSheet.Validations[workSheet.Validations.Add(mobileNumberArea)];
+            numberOnlyValidation.Type = ValidationType.WholeNumber;
+            numberOnlyValidation.Operator = OperatorType.GreaterOrEqual;
+            numberOnlyValidation.Formula1 = "0"; // Minimal angka 0
+            numberOnlyValidation.ShowError = true;
+            numberOnlyValidation.AlertStyle = ValidationAlertType.Stop;
+            numberOnlyValidation.ErrorTitle = "Invalid input";
+            numberOnlyValidation.ErrorMessage = "Mobile number must contain only numbers.";
 
             int addressColumnIndex = 6;
             CellArea addressArea = CellArea.CreateCellArea(1, addressColumnIndex, 1000, addressColumnIndex);
@@ -260,6 +271,29 @@ namespace ExamWeb.Services
             addressValidation.ErrorTitle = "Invalid input";
             addressValidation.ErrorMessage = "Address must be between 1 and 255 characters";
 
+            //------------------------------------------------------------------------------------------------------------------
+            int dateOfBirthColumnIndex = 9;
+            CellArea dateOfBirthArea = CellArea.CreateCellArea(1, dateOfBirthColumnIndex, 1000, dateOfBirthColumnIndex);
+
+            // Validasi hanya menerima input tanggal (date format)
+            Validation dateOfBirthValidation = workSheet.Validations[workSheet.Validations.Add(dateOfBirthArea)];
+            dateOfBirthValidation.Type = ValidationType.Date;
+            dateOfBirthValidation.Operator = OperatorType.Between;
+
+            // Atur batasan tanggal (misalnya, lahir antara tahun 1900 hingga 2024)
+            dateOfBirthValidation.Formula1 = "1900-01-01";
+            dateOfBirthValidation.Formula2 = "2099-12-31";
+
+            dateOfBirthValidation.ShowError = true;
+            dateOfBirthValidation.AlertStyle = ValidationAlertType.Stop;
+            dateOfBirthValidation.ErrorTitle = "Invalid Date Format";
+            dateOfBirthValidation.ErrorMessage = "Please enter a valid date in the format YYYY-MM-DD (e.g., 1995-06-15).";
+
+            // Menampilkan input message saat user memilih sel
+            dateOfBirthValidation.ShowInput = true;
+            dateOfBirthValidation.InputTitle = "Enter Date of Birth";
+            dateOfBirthValidation.InputMessage = "Enter a valid date (YYYY-MM-DD). Example: 1995-06-15";
+            //------------------------------------------------------------------------------------------------------------------
 
             int graduationYearColumnIndex = 10;
             CellArea graduationYearArea = CellArea.CreateCellArea(1, graduationYearColumnIndex, 1000, graduationYearColumnIndex);

@@ -22,14 +22,13 @@ namespace ExamWeb.Interfaces
         EmploymentTypeDTO GetEmploymentTypeByID(byte employmentTypeID);
         AttachmentTypeDTO GetAttachmentTypeByID(byte attachmentTypeID);
         JobPostingService.JobAttachmentDTO GetJobAttachmentByID(int attachmentID);
-        void UpsertJobPosting(JobPostingModel jobPosting);
         void InsertJobPosting(JobPostingModel jobPosting);
         void UpdateJobPosting(JobPostingModel jobPosting);
         void DeleteJobPosting(Guid jobPostingID);
-
-        void InsertJobApply(JobCandidateDTO jobCandidate);
-
-        void InsertJobAttachments(List<JobPostingService.JobAttachmentDTO> attachments);
+        void ApplyToJob(JobAttachmentModel applyJob);
+        void InsertJobCandidate(JobCandidateModel applyJob);
+        void UpsertJobPosting(JobPostingModel jobPosting);
+        IEnumerable<JobCandidateModel> GetAllCandidateByJobID(Guid jobID);
 
     }
 }

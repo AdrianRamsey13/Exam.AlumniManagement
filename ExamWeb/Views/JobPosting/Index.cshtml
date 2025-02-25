@@ -1,7 +1,7 @@
 ﻿@model ExamWeb.Models.JobPostingModel
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Job Posting Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         /* Pusatkan tabel dalam halaman */
         .table-container {
@@ -88,14 +89,14 @@
             <th>
                 @Html.DisplayNameFor(model => model.JobDescription)
             </th>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.Company)
-                </th>*@
+            <th>
+                    @Html.DisplayNameFor(model => model.Candidates)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.IsActive)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsClosed)
+                Closed
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ModifiedDate)
@@ -116,71 +117,56 @@
             {
                 @Html.AntiForgeryToken()
                 <div class="modal-body">
-
-                    <div class="form-horizontal">
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Title, new { @class = "control-label" })
                                 @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
                             </div>
-                        </div>
 
-                        <div class="form-group mt-2">
-                            @Html.LabelFor(model => model.Company, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
+                            <div class="form-group mt-2">
+                                @Html.LabelFor(model => model.Company, new { @class = "control-label" })
                                 @Html.EditorFor(model => model.Company, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(model => model.Company, "", new { @class = "text-danger" })
                             </div>
-                        </div>
 
-                        <div class="form-group mt-2">
-                            @Html.LabelFor(model => model.EmploymentTypeID, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.DropDownListFor(model => model.EmploymentTypeID, (IEnumerable<SelectListItem>)ViewBag.EmploymentTypeList, "Select Employment Type", new { @class = "form-control", id = "EmploymentTypeDropdown" })
+                            <div class="form-group mt-2">
+                                @Html.LabelFor(model => model.EmploymentTypeID, new { @class = "control-label" })
+                                @Html.DropDownListFor(model => model.EmploymentTypeID, (IEnumerable<SelectListItem>)ViewBag.EmploymentTypeList, "Select Employment Type", new { @class = "form-control" })
                                 @Html.ValidationMessageFor(model => model.EmploymentTypeID, "", new { @class = "text-danger" })
                             </div>
-                        </div>
 
-                        <div class="form-group mt-2">
-                            @Html.LabelFor(model => model.MinimumExperience, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
+                            <div class="form-group mt-2">
+                                @Html.LabelFor(model => model.MinimumExperience, new { @class = "control-label" })
                                 @Html.EditorFor(model => model.MinimumExperience, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(model => model.MinimumExperience, "", new { @class = "text-danger" })
                             </div>
+
+                            <div class="form-group mt-2">
+                                Skill
+                                <div class="col-md-10">
+                                    @Html.ListBoxFor(model => model.SelectedSkills, (MultiSelectList)ViewBag.SkillsList, new { @class = "form-control", id = "ddlSkill", multiple = "multiple" })
+                                    @Html.ValidationMessageFor(model => model.SelectedSkills, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="form-group mt-2">
-                            Description
-                            <div class="col-md-10">
-                                @Html.EditorFor(model => model.JobDescription, new { htmlAttributes = new { @class = "form-control" } })
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea id="JobDescription" name="JobDescription" class="form-control"></textarea>
                                 @Html.ValidationMessageFor(model => model.JobDescription, "", new { @class = "text-danger" })
                             </div>
-                        </div>
 
-                        <div class="form-group mt-2">
-                            Skill
-                            <div class="col-md-10">
-                                @Html.ListBoxFor(model => model.SelectedSkills, (MultiSelectList)ViewBag.SkillsList, new { @class = "form-control", id = "ddlSkill", multiple = "multiple" })
-                                @Html.ValidationMessageFor(model => model.SelectedSkills, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-                        <div class="form-group mt-2">
-                            <label>Attachments</label>
-                            <div class="col-md-10">
+                            <div class="form-group mt-2">
+                                <label>Attachments</label>
                                 @if (ViewBag.AttachmentsList != null)
                                 {
                                     foreach (var attachment in ViewBag.AttachmentsList as List<SelectListItem>)
                                     {
                                         <div class="form-check">
-                                            <input type="checkbox"
-                                                   name="SelectedAttachmentTypes"
-                                                   value="@attachment.Value"
-                                                   id="attachment_@attachment.Value"
-                                                   class="form-check-input"
-                                                   @(Model != null && Model.SelectedAttachmentTypes != null && Model.SelectedAttachmentTypes.Contains(Convert.ToInt32(attachment.Value)) ? "checked" : "") />
+                                            <input type="checkbox" name="SelectedAttachmentTypes" value="@attachment.Value" id="attachment_@attachment.Value" class="form-check-input" />
                                             <label class="form-check-label" for="attachment_@attachment.Value">@attachment.Text</label>
                                         </div>
                                     }
@@ -191,31 +177,21 @@
                                 }
                                 @Html.ValidationMessageFor(model => model.SelectedAttachmentTypes, "", new { @class = "text-danger" })
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                <div class="form-check form-switch custom-switch">
-                                    @Html.CheckBoxFor(model => model.IsActive, new { @class = "form-check-input custom-switch-input", id = "isActiveSwitch" })
-                                    <label class="form-check-label custom-switch-label" for="isActiveSwitch">
-                                        @(Model != null && Model.IsActive ? "Active" : "Inactive")
-                                    </label>
+                            <div class="form-group mt-2">
+                                @Html.LabelFor(model => model.IsActive, new { @class = "control-label" })
+                                <div class="form-check form-switch">
+                                    @Html.CheckBoxFor(model => model.IsActive, new { @class = "form-check-input", id = "isActiveSwitch" })
+                                    <label class="form-check-label" for="isActiveSwitch">Active</label>
                                 </div>
-                                @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.IsClosed, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                <div class="form-check form-switch custom-switch">
-                                    @Html.CheckBoxFor(model => model.IsClosedValue, new { @class = "form-check-input custom-switch-input", id = "isClosedSwitch" })
-                                    <label class="form-check-label custom-switch-label" for="isClosedSwitch">
-                                        @(Model != null && Model.IsClosed.GetValueOrDefault() ? "Closed" : "Not Yet")
-                                    </label>
+                            <div class="form-group mt-2">
+                                @Html.LabelFor(model => model.IsClosed, new { @class = "control-label" })
+                                <div class="form-check form-switch">
+                                    @Html.CheckBoxFor(model => model.IsClosedValue, new { @class = "form-check-input", id = "isClosedSwitch" })
+                                    <label class="form-check-label" for="isClosedSwitch">Closed</label>
                                 </div>
-                                @Html.ValidationMessageFor(model => model.IsClosed, "", new { @class = "text-danger" })
                             </div>
                         </div>
                     </div>
@@ -229,84 +205,71 @@
     </div>
 </div>
 
+
 @*Edit modal*@
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Edit Item</h5>
+                <h5 class="modal-title" id="editModalLabel">Edit Job Posting</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             @using (Html.BeginForm("Edit", "JobPosting", FormMethod.Post, new { id = "editForm" }))
             {
                 @Html.AntiForgeryToken()
                 <div class="modal-body">
-                    <div class="form-horizontal">
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="row">
+                        <!-- Kolom Kiri -->
+                        <div class="col-md-6">
+                            @Html.HiddenFor(model => model.JobID, new { id = "JobID" })
 
-                        @* Hidden field for JobID *@
-                        @Html.HiddenFor(model => model.JobID, new { id = "JobID" })
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
+                            <div class="mb-3">
+                                @Html.LabelFor(model => model.Title, new { @class = "form-label" })
                                 @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", id = "Title" } })
                                 @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
                             </div>
-                        </div>
 
-                        <div class="form-group mt-2">
-                            @Html.LabelFor(model => model.Company, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
+                            <div class="mb-3">
+                                @Html.LabelFor(model => model.Company, new { @class = "form-label" })
                                 @Html.EditorFor(model => model.Company, new { htmlAttributes = new { @class = "form-control", id = "Company" } })
                                 @Html.ValidationMessageFor(model => model.Company, "", new { @class = "text-danger" })
                             </div>
-                        </div>
 
-                        <div class="form-group mt-2">
-                            @Html.LabelFor(model => model.EmploymentTypeID, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
+                            <div class="mb-3">
+                                @Html.LabelFor(model => model.EmploymentTypeID, new { @class = "form-label" })
                                 @Html.DropDownListFor(model => model.EmploymentTypeID, (IEnumerable<SelectListItem>)ViewBag.EmploymentTypeList, "Select Employment Type", new { @class = "form-control", id = "EditEmploymentTypeDropdown" })
                                 @Html.ValidationMessageFor(model => model.EmploymentTypeID, "", new { @class = "text-danger" })
                             </div>
-                        </div>
 
-                        <div class="form-group mt-2">
-                            @Html.LabelFor(model => model.MinimumExperience, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
+                            <div class="mb-3">
+                                @Html.LabelFor(model => model.MinimumExperience, new { @class = "form-label" })
                                 @Html.EditorFor(model => model.MinimumExperience, new { htmlAttributes = new { @class = "form-control", id = "MinimumExperience" } })
                                 @Html.ValidationMessageFor(model => model.MinimumExperience, "", new { @class = "text-danger" })
                             </div>
                         </div>
 
-                        <div class="form-group mt-2">
-                            <label>Description</label>
-                            <div class="col-md-10">
-                                @Html.EditorFor(model => model.JobDescription, new { htmlAttributes = new { @class = "form-control", id = "JobDescription" } })
+                        <!-- Kolom Kanan -->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="JobDescription" class="form-label">Description</label>
+                                @Html.TextAreaFor(model => model.JobDescription, new { @class = "form-control", id = "JobDescription", rows = "4" })
                                 @Html.ValidationMessageFor(model => model.JobDescription, "", new { @class = "text-danger" })
                             </div>
-                        </div>
 
-                        <div class="form-group mt-2">
-                            <label>Skill</label>
-                            <div class="col-md-10">
+                            <div class="mb-3">
+                                <label for="editDdlSkill" class="form-label">Skills</label>
                                 @Html.ListBoxFor(model => model.SelectedSkills, (MultiSelectList)ViewBag.SkillsList, new { @class = "form-control", id = "editDdlSkill", multiple = "multiple" })
                                 @Html.ValidationMessageFor(model => model.SelectedSkills, "", new { @class = "text-danger" })
                             </div>
-                        </div>
 
-                        <div class="form-group mt-2">
-                            <label>Attachments</label>
-                            <div class="col-md-10">
+                            <div class="mb-3">
+                                <label class="form-label">Attachments</label>
                                 @if (ViewBag.AttachmentsList != null)
                                 {
                                     foreach (var attachment in ViewBag.AttachmentsList as List<SelectListItem>)
                                     {
                                         <div class="form-check">
-                                            <input type="checkbox"
-                                                   name="SelectedAttachmentTypes"
-                                                   value="@attachment.Value"
-                                                   id="edit_attachment_@attachment.Value"
-                                                   class="form-check-input"
+                                            <input type="checkbox" name="SelectedAttachmentTypes" value="@attachment.Value" id="edit_attachment_@attachment.Value" class="form-check-input"
                                                    @(Model != null && Model.SelectedAttachmentTypes != null && Model.SelectedAttachmentTypes.Contains(Convert.ToInt32(attachment.Value)) ? "checked" : "") />
                                             <label class="form-check-label" for="edit_attachment_@attachment.Value">@attachment.Text</label>
                                         </div>
@@ -318,35 +281,24 @@
                                 }
                                 @Html.ValidationMessageFor(model => model.SelectedAttachmentTypes, "", new { @class = "text-danger" })
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                <div class="form-check form-switch">
-                                    @Html.CheckBoxFor(model => model.IsActive, new { @class = "form-check-input", id = "editIsActiveSwitch" })
-                                    <label class="form-check-label" for="editIsActiveSwitch">
-                                        @(Model != null && Model.IsActive ? "Active" : "Inactive")
-                                    </label>
-                                </div>
-                                @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                            <div class="form-check form-switch mb-3">
+                                @Html.CheckBoxFor(model => model.IsActive, new { @class = "form-check-input", id = "editIsActiveSwitch" })
+                                <label class="form-check-label" for="editIsActiveSwitch">
+                                    Active
+                                </label>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.IsClosed, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                <div class="form-check form-switch">
-                                    @Html.CheckBoxFor(model => model.IsClosedValue, new { @class = "form-check-input", id = "editIsClosedSwitch" })
-                                    <label class="form-check-label" for="editIsClosedSwitch">
-                                        @(Model != null && Model.IsClosed.GetValueOrDefault() ? "Closed" : "Not Yet")
-                                    </label>
-                                </div>
-                                @Html.ValidationMessageFor(model => model.IsClosed, "", new { @class = "text-danger" })
+                            <div class="form-check form-switch">
+                                @Html.CheckBoxFor(model => model.IsClosedValue, new { @class = "form-check-input", id = "editIsClosedSwitch" })
+                                <label class="form-check-label" for="editIsClosedSwitch">
+                                    Closed
+                                </label>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success">Save</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -382,19 +334,19 @@
                     </div>
 
                     @*<div class="row">
-                        @foreach (var attachment in ViewBag.AttachmentTypes)
-                        {
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label for="@attachment.Name" class="form-label">@attachment.Name</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="bi bi-paperclip"></i></span>
-                                        <input type="file" class="form-control" id="@attachment.Name" name="attachments[@attachment.Id]">
+                            @foreach (var attachment in ViewBag.AttachmentTypes)
+                            {
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="@attachment.Name" class="form-label">@attachment.Name</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-paperclip"></i></span>
+                                            <input type="file" class="form-control" id="@attachment.Name" name="attachments[@attachment.Id]">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        }
-                    </div>*@
+                            }
+                        </div>*@
 
                     <div class="form-group">
                         <label for="cv">Curriculum Vitae</label>
@@ -437,17 +389,58 @@
                     "datatype": "json"
                 },
                 "columns": [
+                    @*{
+                        "data": null,
+                        "render": function (data, type, row) {
+                            var createApplyJobLink = '@Url.Action("CreateApplyJob", "JobPosting", new { jobId = "PLACEHOLDER" })'.replace("PLACEHOLDER", row.JobID);
+                            var candidatesLink = '@Url.Action("Index", "Candidate", new { jobId = "PLACEHOLDER" })'.replace("PLACEHOLDER", row.JobID);
+
+                            return `
+                                <div style="display: flex; gap: 5px; align-items: center;">
+                                    <button class="btn btn-warning editButton" data-id="${row.JobID}" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <a href="${createApplyJobLink}" class="btn btn-success" title="Apply Job">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </a>
+                                    <a href="${candidatesLink}" class="btn btn-info" title="Candidates">
+                                        <i class="fas fa-users"></i>
+                                    </a>
+                                    <button class="btn btn-danger deleteButton" data-id="${row.JobID}" title="Delete">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                            `;
+                        }
+                    },*@
                     {
                         "data": null,
                         "render": function (data, type, row) {
                             var createApplyJobLink = '@Url.Action("CreateApplyJob", "JobPosting", new { jobId = "PLACEHOLDER" })'.replace("PLACEHOLDER", row.JobID);
                             var candidatesLink = '@Url.Action("Index", "Candidate", new { jobId = "PLACEHOLDER" })'.replace("PLACEHOLDER", row.JobID);
-                            return '<div style="display: flex; gap: 5px;">' +
-                                '<a href="javascript:void(0);" class="btn btn-primary editButton" data-id="' + row.JobID + '">Edit</a>' +
-                                '<a href="' + createApplyJobLink + '" class="btn btn-success" data-id="' + row.JobID + '" id="applyButton" style="margin-left: 5px;">Apply Job</a>' +
-                                '<a href="' + candidatesLink + '" class="btn btn-info" data-id="' + row.JobID + '" id="candidatesButton" style="margin-left: 5px;">Candidates</a>' +
-                                '<button class="btn btn-danger deleteButton" data-id="' + row.JobID + '">Delete</button>' +
-                                '</div>';
+
+                            var buttons = `
+                                <a href="${candidatesLink}" class="btn btn-info" title="Candidates">
+                                    <i class="fas fa-users"></i>
+                                </a>
+                            `;
+
+                            // Kalo dia Active (IsClosed = false)
+                            if (!row.IsClosed) {
+                                buttons += `
+                                    <button class="btn btn-warning editButton" data-id="${row.JobID}" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <a href="${createApplyJobLink}" class="btn btn-success" title="Apply Job">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </a>
+                                    <button class="btn btn-danger deleteButton" data-id="${row.JobID}" title="Delete">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                `;
+                            }
+
+                            return `<div style="display: flex; gap: 5px; align-items: center;">${buttons}</div>`;
                         }
                     },
                     {
@@ -458,17 +451,17 @@
                     },
                     { "data": "Title" },
                     { "data": "JobDescription" },
-                    //{ "data": "Company" },
+                    { "data": "TotalCandidates" },
                     {
                         "data": "IsActive",
                         "render": function (data, type, row) {
-                            return data ? "Active" : "Closed";
+                            return data ? "Active" : "Inactive";
                         }
                     },
                     {
                         "data": "IsClosed",
                         "render": function (data, type, row) {
-                            return data ? "Active" : "Closed";
+                            return data ? "Active" : "Inactive";
                         }
                     },
                     {

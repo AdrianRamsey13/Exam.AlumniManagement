@@ -83,16 +83,6 @@ namespace ExamWeb.Services
             _jpServiceClient.UpsertJobPosting(result);
         }
 
-        public void InsertJobApply(JobCandidateDTO jobCandidate)
-        {
-            _jpServiceClient.InsertJobApply(jobCandidate);
-        }
-
-        public void InsertJobAttachments(List<JobPostingService.JobAttachmentDTO> attachments)
-        {
-           //_jpServiceClient.InsertJobAttachments(attachments);
-        }
-
         public void InsertJobPosting(JobPostingModel jobPosting)
         {
             var result = Mapping.Mapper.Map<JobPostingDTO>(jobPosting);
@@ -103,6 +93,25 @@ namespace ExamWeb.Services
         {
             var result = Mapping.Mapper.Map<JobPostingDTO>(jobPosting);
             _jpServiceClient.UpdateJobPosting(result);
+        }
+
+        public void ApplyToJob(JobAttachmentModel applyJob)
+        {
+            var result = Mapping.Mapper.Map<JobPostingService.JobAttachmentDTO>(applyJob);
+            _jpServiceClient.ApplyToJob(result);
+        }
+
+        public void InsertJobCandidate(JobCandidateModel jobCandidate)
+        {
+            var data = Mapping.Mapper.Map<JobCandidateDTO>(jobCandidate);
+            _jpServiceClient.InsertJobCandidate(data);
+        }
+
+        public IEnumerable<JobCandidateModel> GetAllCandidateByJobID(Guid jobID)
+        {
+            var data = _jpServiceClient.GetAllCandidateByJobID(jobID);
+            var result = Mapping.Mapper.Map<List<JobCandidateModel>>(data);
+            return result;
         }
     }
 }

@@ -16,25 +16,45 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css">
     <style>
-        .dataTables_wrapper {
-            width: max-content;
+        .table-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-            .dataTables_wrapper .dataTables_paginate {
-                float: none;
-                text-align: center;
-            }
+        /* Atur tampilan tabel agar responsif */
+        .dataTables_wrapper {
+            width: 100%;
+            max-width: 1200px; /* Atur sesuai kebutuhan */
+            margin: 0 auto;
+        }
 
-            .dataTables_wrapper .dataTables_info {
-                float: left;
-                padding-top: 0.755em;
-            }
+        /* Pastikan tabel menyesuaikan layar */
+        table.dataTable {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+        }
 
-            .dataTables_wrapper .bottom {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
+        /* Penyesuaian untuk pagination & informasi */
+        .dataTables_wrapper .dataTables_paginate {
+            float: none;
+            text-align: center;
+        }
+
+        .dataTables_wrapper .dataTables_info {
+            float: left;
+            padding-top: 0.755em;
+        }
+
+        .dataTables_wrapper .bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
     </style>
 }
 <h2>Job History of @ViewBag.FullName</h2>
@@ -73,6 +93,10 @@
         </tr>
     </thead>
 </table>
+
+<button type="button" class="btn btn-secondary" onclick="history.back()">
+    <i class="fas fa-arrow-left"></i> Back
+</button>
 
 @*Create modal*@
 <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
