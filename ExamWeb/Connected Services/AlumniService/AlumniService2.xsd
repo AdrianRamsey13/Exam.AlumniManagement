@@ -12,6 +12,8 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="Address" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="AlumniID" type="xs:int" />
+      <xs:element minOccurs="0" name="ApplyDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Attachments" nillable="true" type="tns:ArrayOfAttachmentDTO" />
       <xs:element minOccurs="0" name="DateOfBirth" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Degree" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="DistrictID" nillable="true" type="xs:int" />
@@ -44,6 +46,19 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="AlumniDTO" nillable="true" type="tns:AlumniDTO" />
+  <xs:complexType name="ArrayOfAttachmentDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AttachmentDTO" nillable="true" type="tns:AttachmentDTO" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAttachmentDTO" nillable="true" type="tns:ArrayOfAttachmentDTO" />
+  <xs:complexType name="AttachmentDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="FileName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FilePath" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AttachmentDTO" nillable="true" type="tns:AttachmentDTO" />
   <xs:complexType name="ArrayOfDistrictDTO">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="DistrictDTO" nillable="true" type="tns:DistrictDTO" />

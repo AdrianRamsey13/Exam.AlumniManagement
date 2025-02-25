@@ -9,8 +9,6 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.3.2/css/fixedColumns.dataTables.min.css">
-    <style>
-    </style>
 }
 
 <h2>Alumni</h2>
@@ -28,14 +26,12 @@
 
 @using (Html.BeginForm("AlumniImportToExcel", "Alumni", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    @*<div class="mt-2 d-flex align-items-center gap-2">
+    <div class="mt-2 d-flex align-items-center gap-2">
             <input type="file" accept=".xlsx, .xls" required name="file" class="form-control w-auto" />
             <button class="btn btn-primary" type="submit">Upload</button>
-        </div>*@
+        </div>
 
 }
-@*@using (Html.BeginForm("StateProvinceImportToExcel", "Alumni", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {*@
 <div style="overflow-x: auto; max-width: 100%;">
     <table class="table" id="alumnisData" style="width:100%">
         <thead>
@@ -368,15 +364,7 @@
                                         <input type="file" id="file" name="file" class="form-control" accept="image/*" onchange="EditpreviewImages(event)" />
                                     </div>
                                     <div id="EditpreviewContainer" class="mt-3 d-flex flex-wrap">
-                                        @if (!string.IsNullOrEmpty(Model.PhotoPath) && !string.IsNullOrEmpty(Model.PhotoName))
-                                        {
-                                            <img src="@Url.Content(Model.PhotoPath.Replace("~", "") + '/' + Model.PhotoName)"
-                                                 alt="Alumni Image" class="img-thumbnail img-preview" />
-                                        }
-                                        else
-                                        {
-                                            <img src="~/Images/placeholder.png" alt="Default Image" class="img-thumbnail img-preview" />
-                                        }
+                                        <img src="~/Images/placeholder.png" alt="Alumni Image" class="img-thumbnail img-preview" />
                                     </div>
                                 </div>
 
@@ -445,7 +433,8 @@
                         "render": function (data, type, row) {
                             var imagePath = row.PhotoPath ? row.PhotoPath.replace("~", "") + '/' + row.PhotoName : '~/Images/placeholder.png';
                             return '<img src="' + imagePath + '" alt="Alumni Image" class="img-thumbnail img-preview" ' +
-                                'onclick="showImagePreview(\'' + imagePath + '\')" />';
+                                'onclick="showImagePreview(\'' + imagePath + '\')" ' +
+                                'style="width: 50px; height: 50px; object-fit: cover;" />';
                         }
                     },
                     { "data": "FullNames" },
@@ -485,6 +474,9 @@
                         "first": "<<",
                         "last": ">>"
                     }
+                },
+                "fixedColumns": {
+                    "leftColumns" : 5
                 }
             });
             $('#alumnisData_filter input').unbind();
@@ -665,6 +657,8 @@
                     type: 'GET',
                     dataType: 'json',
                     success: function (response) {
+                        let photoPath = response.PhotoPath ? response.PhotoPath.replace("~", "") + '/' + response.PhotoName : '~/Images/placeholder.png';
+
                         // Populate the form fields with the data returned from the server // CHANGE THE CONTENTS
                         $('#editModal #AlumniID').val(response.AlumniID); // Assuming you have a hidden field for ID
                         $('#editModal #FirstName').val(response.FirstName);
@@ -678,6 +672,7 @@
                         $('#editModal #Degree').val(response.Degree);
                         $('#editModal #EditFacultyDropdown').val(response.FacultyID);
                         $('#editModal #LinkedInProfile').val(response.LinkedInProfile);
+                        $('#editModal #EditpreviewContainer img').attr('src', photoPath.trim());
 
                         // Show the Edit Modal
                         $('#editModal').modal('show');
@@ -930,7 +925,9 @@
                     let img = document.createElement("img");
                     img.src = e.target.result;
                     img.classList.add("img-thumbnail", "m-1");
-                    img.style.width = "100px"; // Ukuran preview kecil agar rapi
+                    img.style.maxWidth = "300px"; // Maksimal lebar 300px
+                    img.style.maxHeight = "300px"; // Maksimal tinggi 300px
+                    img.style.objectFit = "contain"; // Pastikan gambar tidak terdistorsi
                     previewContainer.appendChild(img);
                 };
                 reader.readAsDataURL(file);

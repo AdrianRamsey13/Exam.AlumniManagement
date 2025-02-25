@@ -29,6 +29,12 @@ namespace ExamWeb.AlumniService {
         private int AlumniIDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.DateTime> ApplyDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private ExamWeb.AlumniService.AttachmentDTO[] AttachmentsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<System.DateTime> DateOfBirthField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -147,6 +153,32 @@ namespace ExamWeb.AlumniService {
                 if ((this.AlumniIDField.Equals(value) != true)) {
                     this.AlumniIDField = value;
                     this.RaisePropertyChanged("AlumniID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.DateTime> ApplyDate {
+            get {
+                return this.ApplyDateField;
+            }
+            set {
+                if ((this.ApplyDateField.Equals(value) != true)) {
+                    this.ApplyDateField = value;
+                    this.RaisePropertyChanged("ApplyDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public ExamWeb.AlumniService.AttachmentDTO[] Attachments {
+            get {
+                return this.AttachmentsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AttachmentsField, value) != true)) {
+                    this.AttachmentsField = value;
+                    this.RaisePropertyChanged("Attachments");
                 }
             }
         }
@@ -540,6 +572,67 @@ namespace ExamWeb.AlumniService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AttachmentDTO", Namespace="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs")]
+    [System.SerializableAttribute()]
+    public partial class AttachmentDTO : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FileNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FilePathField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string FileName {
+            get {
+                return this.FileNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FileNameField, value) != true)) {
+                    this.FileNameField = value;
+                    this.RaisePropertyChanged("FileName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string FilePath {
+            get {
+                return this.FilePathField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FilePathField, value) != true)) {
+                    this.FilePathField = value;
+                    this.RaisePropertyChanged("FilePath");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DistrictDTO", Namespace="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs")]
     [System.SerializableAttribute()]
     public partial class DistrictDTO : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -850,6 +943,12 @@ namespace ExamWeb.AlumniService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/ImportFromExcel", ReplyAction="http://tempuri.org/IAlumniService/ImportFromExcelResponse")]
         System.Threading.Tasks.Task ImportFromExcelAsync(ExamWeb.AlumniService.AlumniDTO alumni);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/UpsertAlumni", ReplyAction="http://tempuri.org/IAlumniService/UpsertAlumniResponse")]
+        void UpsertAlumni(ExamWeb.AlumniService.AlumniDTO alumni);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/UpsertAlumni", ReplyAction="http://tempuri.org/IAlumniService/UpsertAlumniResponse")]
+        System.Threading.Tasks.Task UpsertAlumniAsync(ExamWeb.AlumniService.AlumniDTO alumni);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -981,6 +1080,14 @@ namespace ExamWeb.AlumniService {
         
         public System.Threading.Tasks.Task ImportFromExcelAsync(ExamWeb.AlumniService.AlumniDTO alumni) {
             return base.Channel.ImportFromExcelAsync(alumni);
+        }
+        
+        public void UpsertAlumni(ExamWeb.AlumniService.AlumniDTO alumni) {
+            base.Channel.UpsertAlumni(alumni);
+        }
+        
+        public System.Threading.Tasks.Task UpsertAlumniAsync(ExamWeb.AlumniService.AlumniDTO alumni) {
+            return base.Channel.UpsertAlumniAsync(alumni);
         }
     }
 }

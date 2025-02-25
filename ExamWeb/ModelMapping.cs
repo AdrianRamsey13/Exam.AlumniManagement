@@ -6,6 +6,7 @@ using AutoMapper;
 using ExamWeb.AlumniImageService;
 using ExamWeb.AlumniService;
 using ExamWeb.FacultyService;
+using ExamWeb.JobAttachmentService;
 using ExamWeb.JobHistoryService;
 using ExamWeb.JobPostingService;
 using ExamWeb.MajorService;
@@ -37,7 +38,8 @@ namespace ExamWeb
             CreateMap<JobHistoryDTO, JobHistoryModel>().ReverseMap();
             CreateMap<AlumniImageDTO, AlumniImageModel>().ReverseMap();
             CreateMap<HobbyDTO, HobbyModel>().ReverseMap();
-            CreateMap<JobPostingDTO, JobPostingModel>().ReverseMap(); 
+            CreateMap<JobPostingDTO, JobPostingModel>().ReverseMap();
+            CreateMap<JobPostingService.JobAttachmentDTO, JobAttachmentModel>().ReverseMap();
         }
     }
 }

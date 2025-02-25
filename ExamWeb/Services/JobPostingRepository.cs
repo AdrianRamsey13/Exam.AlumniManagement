@@ -5,21 +5,58 @@ using System.Web;
 using ExamWeb.JobPostingService;
 using ExamWeb.Models;
 using ExamWeb.Interfaces;
+using ExamWeb.JobAttachmentService;
 
 namespace ExamWeb.Services
 {
     public class JobPostingRepository : IJobPostingRepository
     {
         private readonly JobPostingServiceClient _jpServiceClient;
-
         public JobPostingRepository()
         {
             _jpServiceClient = new JobPostingServiceClient();
         }
 
-        public JobPostingDTO GetJobPostingByID(Guid id)
+        public void DeleteJobPosting(Guid jobPostingID)
         {
-            var data = _jpServiceClient.GetJobPostingByID(id);
+            _jpServiceClient.DeleteJobPosting(jobPostingID);
+        }
+
+        public AttachmentTypeDTO GetAttachmentTypeByID(byte attachmentTypeID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<AttachmentTypeDTO> GetAttachmentTypes()
+        {
+            var data = _jpServiceClient.GetAttachmentTypes();
+            return data;
+        }
+
+        public EmploymentTypeDTO GetEmploymentTypeByID(byte employmentTypeID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<EmploymentTypeDTO> GetEmploymentTypes()
+        {
+            var data = _jpServiceClient.GetEmploymentTypes();
+            return data;
+        }
+
+        public JobPostingService.JobAttachmentDTO GetJobAttachmentByID(int attachmentID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<JobPostingService.JobAttachmentDTO> GetJobAttachments()
+        {
+            throw new NotImplementedException();
+        }
+
+        public JobPostingDTO GetJobPostingByID(Guid jobPostingID)
+        {
+            var data = _jpServiceClient.GetJobPostingByID(jobPostingID);
             return data;
         }
 
@@ -29,20 +66,43 @@ namespace ExamWeb.Services
             return data;
         }
 
-        public void InsertJobPosting(JobPostingModel jobPostingDTO)
+        public SkillsDTO GetSkillByID(int skillID)
         {
-            var result = Mapping.Mapper.Map<JobPostingDTO>(jobPostingDTO);
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<SkillsDTO> GetSkills()
+        {
+            var data = _jpServiceClient.GetSkills();
+            return data;
+        }
+
+        public void UpsertJobPosting(JobPostingModel model)
+        {
+            var result = Mapping.Mapper.Map<JobPostingDTO>(model);
+            _jpServiceClient.UpsertJobPosting(result);
+        }
+
+        public void InsertJobApply(JobCandidateDTO jobCandidate)
+        {
+            _jpServiceClient.InsertJobApply(jobCandidate);
+        }
+
+        public void InsertJobAttachments(List<JobPostingService.JobAttachmentDTO> attachments)
+        {
+           //_jpServiceClient.InsertJobAttachments(attachments);
+        }
+
+        public void InsertJobPosting(JobPostingModel jobPosting)
+        {
+            var result = Mapping.Mapper.Map<JobPostingDTO>(jobPosting);
             _jpServiceClient.InsertJobPosting(result);
         }
 
-        public void UpdateJobPosting(JobPostingModel jobPostingDTO)
+        public void UpdateJobPosting(JobPostingModel jobPosting)
         {
-            var result = Mapping.Mapper.Map<JobPostingDTO>(jobPostingDTO);
+            var result = Mapping.Mapper.Map<JobPostingDTO>(jobPosting);
             _jpServiceClient.UpdateJobPosting(result);
-        }
-        public void DeleteJobPosting(Guid id)
-        {
-            _jpServiceClient.DeleteJobPosting(id);
         }
     }
 }

@@ -47,6 +47,12 @@ namespace ExamWeb.Services
             return data;
         }
 
+        public void UpsertAlumni(AlumniModel alumni)
+        {
+            var result = Mapping.Mapper.Map<AlumniDTO>(alumni);
+            _alumniServiceClient.UpsertAlumni(result);
+        }
+
         public void InsertAlumni(AlumniModel alumni)
         {
             var result = Mapping.Mapper.Map<AlumniDTO>(alumni);

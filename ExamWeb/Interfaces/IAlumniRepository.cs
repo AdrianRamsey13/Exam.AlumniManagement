@@ -16,6 +16,7 @@ namespace ExamWeb.Interfaces
         IEnumerable<StateDTO> GetStates();
         IEnumerable<HobbyDTO> GetHobbys();
         AlumniDTO GetAlumniByID(int alumniId);
+        void UpsertAlumni(AlumniModel alumni);
         void InsertAlumni(AlumniModel alumni);
         void UpdateAlumni(AlumniModel alumni);
         void DeleteAlumni(int alumniId);

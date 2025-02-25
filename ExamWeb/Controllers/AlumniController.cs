@@ -129,6 +129,39 @@ namespace ExamWeb.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpsertAlumni(AlumniModel alumniModel)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    bool isUpdate = alumniModel.AlumniID > 0; // Jika ID > 0 maka update, jika 0 atau null maka insert
+                    _alumniRepository.UpsertAlumni(alumniModel);
+
+                    if (isUpdate)
+                    {
+                        TempData["SuccessMessage"] = "Alumni updated successfully";
+                    }
+                    else
+                    {
+                        TempData["SuccessMessage"] = "Alumni added successfully";
+                    }
+
+                    return RedirectToAction("Index");
+                }
+
+                return View(alumniModel);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Unable to save alumni: " + ex.Message);
+                return View(alumniModel);
+            }
+        }
+
+
 
         // POST: Alumni/Create
         [HttpPost]
@@ -162,7 +195,7 @@ namespace ExamWeb.Controllers
                         alumni.PhotoPath = alumniPhotosPath;
 
                     }
-                        _alumniRepository.InsertAlumni(alumni);
+                        _alumniRepository.UpsertAlumni(alumni);
                     //TempData["SuccessMessage"] = "Alumni added successfully";
                 }
 
@@ -348,7 +381,7 @@ namespace ExamWeb.Controllers
                         alumni.PhotoPath = existingAlumni.PhotoPath ?? string.Empty;
                     }
 
-                    _alumniRepository.UpdateAlumni(alumni);
+                    _alumniRepository.UpsertAlumni(alumni);
                     TempData["SuccessMessage"] = "Alumni updated successfully!";
 
                     return Json(new

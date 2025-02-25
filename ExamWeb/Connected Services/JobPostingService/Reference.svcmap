@@ -23,6 +23,7 @@
   </MetadataSources>
   <Metadata>
     <MetadataFile FileName="JobPostingService.xsd" MetadataType="Schema" ID="64297aa7-4f13-476a-8a45-eb077b2345e4" SourceId="1" SourceUrl="http://localhost:50219/Services/JobPostingService.svc?xsd=xsd2" />
+    <MetadataFile FileName="JobPostingService4.xsd" MetadataType="Schema" ID="8bbfd0fc-558c-4d2f-be8b-b79026b6e7f9" SourceId="1" SourceUrl="http://localhost:50219/Services/JobPostingService.svc?xsd=xsd4" />
     <MetadataFile FileName="JobPostingService1.xsd" MetadataType="Schema" ID="08a5b3b1-54b9-4c58-bae7-d7262e680312" SourceId="1" SourceUrl="http://localhost:50219/Services/JobPostingService.svc?xsd=xsd1" />
     <MetadataFile FileName="JobPostingService.wsdl" MetadataType="Wsdl" ID="e51bfce1-6e66-4ea3-8644-97e2db210a56" SourceId="1" SourceUrl="http://localhost:50219/Services/JobPostingService.svc?wsdl" />
     <MetadataFile FileName="JobPostingService2.xsd" MetadataType="Schema" ID="a4024ffd-acd5-4009-a46f-e131af02848e" SourceId="1" SourceUrl="http://localhost:50219/Services/JobPostingService.svc?xsd=xsd0" />

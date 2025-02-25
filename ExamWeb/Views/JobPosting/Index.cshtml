@@ -6,161 +6,448 @@
 }
 
 @section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.3.2/css/fixedColumns.dataTables.min.css">
     <style>
-        .dataTables_wrapper {
-            width: max-content;
+        /* Pusatkan tabel dalam halaman */
+        .table-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-            .dataTables_wrapper .dataTables_paginate {
-                float: none;
-                text-align: center;
+        /* Atur tampilan tabel agar responsif */
+        .dataTables_wrapper {
+            width: 100%;
+            max-width: 1200px; /* Atur sesuai kebutuhan */
+            margin: 0 auto;
+        }
+
+        /* Pastikan tabel menyesuaikan layar */
+        table.dataTable {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Penyesuaian untuk pagination & informasi */
+        .dataTables_wrapper .dataTables_paginate {
+            float: none;
+            text-align: center;
+        }
+
+        .dataTables_wrapper .dataTables_info {
+            float: left;
+            padding-top: 0.755em;
+        }
+
+        .dataTables_wrapper .bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .custom-switch .custom-switch-input {
+            width: 3rem;
+            height: 1.5rem;
+            cursor: pointer;
+        }
+
+            .custom-switch .custom-switch-input:checked {
+                background-color: #28a745;
+                border-color: #28a745;
             }
 
-            .dataTables_wrapper .dataTables_info {
-                float: left;
-                padding-top: 0.755em;
-            }
-
-            .dataTables_wrapper .bottom {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
+        .custom-switch-label {
+            font-size: 1.2rem;
+            margin-left: 10px;
+            font-weight: bold;
+        }
     </style>
 }
 
-<h2>Job Posting Management</h2>
+<h2>Job Posting</h2>
 
-<p>
-    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#createModal">Create New</a>
-</p>
+<button id="createButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
+    Add New
+</button>
 
-<div style="overflow-x: auto; max-width: 100%;">
-    <table class="table" id="jobPostingData" style="width:100%">
-        <thead>
-            <tr>
-                <th><input type="checkbox" id="selectAll" /></th>
-                <th>Actions</th>
-                <th>No.</th>
-                <th>Title</th>
-                <th>Job Description</th>
-                <th>Candidates</th>
-                <th>Status</th>
-                <th>Last Update</th>
-            </tr>
-        </thead>
-    </table>
+<table class="table" id="jpData" style="width:100%">
+    <thead>
+        <tr>
+            <th>Actions</th>
+            <th>No.</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.JobDescription)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Company)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsClosed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedDate)
+            </th>
+        </tr>
+    </thead>
+</table>
 
-    @*-------------Create Modal-----------------*@
-    <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="createModalLabel">Create New Job Posting</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                @using (Html.BeginForm("Create", "JobPosting", FormMethod.Post, new { id = "createForm" }))
-                {
-                    @Html.AntiForgeryToken()
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            @Html.LabelFor(model => model.Title, "Job Title", new { @class = "form-label" })
-                            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+@*Create modal*@
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createModalLabel">Create New Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            @using (Html.BeginForm("Create", "JobPosting", FormMethod.Post, new { id = "createForm" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            @Html.LabelFor(model => model.Company, new { @class = "form-label" })
-                            @Html.EditorFor(model => model.Company, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Company, "", new { @class = "text-danger" })
+
+                        <div class="form-group mt-2">
+                            @Html.LabelFor(model => model.Company, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Company, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Company, "", new { @class = "text-danger" })
+                            </div>
                         </div>
-                        <div class="mb-3 row">
-                            <div class="col-md-6">
-                                @Html.LabelFor(model => model.EmploymentTypeID, "Employment Type", new { @class = "form-label" })
-                                @Html.EditorFor(model => model.EmploymentTypeID, new { htmlAttributes = new { @class = "form-control" } })
+
+                        <div class="form-group mt-2">
+                            @Html.LabelFor(model => model.EmploymentTypeID, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.EmploymentTypeID, (IEnumerable<SelectListItem>)ViewBag.EmploymentTypeList, "Select Employment Type", new { @class = "form-control", id = "EmploymentTypeDropdown" })
                                 @Html.ValidationMessageFor(model => model.EmploymentTypeID, "", new { @class = "text-danger" })
                             </div>
-                            <div class="col-md-6">
-                                @Html.LabelFor(model => model.MinimumExperience, new { @class = "form-label" })
+                        </div>
+
+                        <div class="form-group mt-2">
+                            @Html.LabelFor(model => model.MinimumExperience, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
                                 @Html.EditorFor(model => model.MinimumExperience, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(model => model.MinimumExperience, "", new { @class = "text-danger" })
                             </div>
                         </div>
-                        <div class="mb-3">
-                            @Html.LabelFor(model => model.JobDescription, new { @class = "form-label" })
-                            @Html.TextAreaFor(model => model.JobDescription, new { @class = "form-control", rows = "3" })
-                            @Html.ValidationMessageFor(model => model.JobDescription, "", new { @class = "text-danger" })
-                        </div>
-                        <div class="mb-3">
-                            @Html.Label("Skills", new { @class = "form-label" })
-                            @Html.EditorFor(model => model.Skills, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Skills, "", new { @class = "text-danger" })
-                        </div>
-                        <div class="mb-3 row">
-                            <div class="col-md-6">
-                                <div class="form-check">
-                                    @Html.EditorFor(model => model.IsActive, new { htmlAttributes = new { @class = "form-check-input" } })
-                                    @Html.LabelFor(model => model.IsActive, new { @class = "form-check-label" })
-                                    @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
-                                </div>
+
+                        <div class="form-group mt-2">
+                            Description
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.JobDescription, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.JobDescription, "", new { @class = "text-danger" })
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-check">
-                                    @Html.EditorFor(model => model.IsClosed, new { htmlAttributes = new { @class = "form-check-input" } })
-                                    @Html.LabelFor(model => model.IsClosed, new { @class = "form-check-label" })
-                                    @Html.ValidationMessageFor(model => model.IsClosed, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group mt-2">
+                            Skill
+                            <div class="col-md-10">
+                                @Html.ListBoxFor(model => model.SelectedSkills, (MultiSelectList)ViewBag.SkillsList, new { @class = "form-control", id = "ddlSkill", multiple = "multiple" })
+                                @Html.ValidationMessageFor(model => model.SelectedSkills, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-2">
+                            <label>Attachments</label>
+                            <div class="col-md-10">
+                                @if (ViewBag.AttachmentsList != null)
+                                {
+                                    foreach (var attachment in ViewBag.AttachmentsList as List<SelectListItem>)
+                                    {
+                                        <div class="form-check">
+                                            <input type="checkbox"
+                                                   name="SelectedAttachmentTypes"
+                                                   value="@attachment.Value"
+                                                   id="attachment_@attachment.Value"
+                                                   class="form-check-input"
+                                                   @(Model != null && Model.SelectedAttachmentTypes != null && Model.SelectedAttachmentTypes.Contains(Convert.ToInt32(attachment.Value)) ? "checked" : "") />
+                                            <label class="form-check-label" for="attachment_@attachment.Value">@attachment.Text</label>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p>No attachments available.</p>
+                                }
+                                @Html.ValidationMessageFor(model => model.SelectedAttachmentTypes, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                <div class="form-check form-switch custom-switch">
+                                    @Html.CheckBoxFor(model => model.IsActive, new { @class = "form-check-input custom-switch-input", id = "isActiveSwitch" })
+                                    <label class="form-check-label custom-switch-label" for="isActiveSwitch">
+                                        @(Model != null && Model.IsActive ? "Active" : "Inactive")
+                                    </label>
                                 </div>
+                                @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.IsClosed, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                <div class="form-check form-switch custom-switch">
+                                    @Html.CheckBoxFor(model => model.IsClosedValue, new { @class = "form-check-input custom-switch-input", id = "isClosedSwitch" })
+                                    <label class="form-check-label custom-switch-label" for="isClosedSwitch">
+                                        @(Model != null && Model.IsClosed.GetValueOrDefault() ? "Closed" : "Not Yet")
+                                    </label>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.IsClosed, "", new { @class = "text-danger" })
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-success">Create</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Create</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@*Edit modal*@
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            @using (Html.BeginForm("Edit", "JobPosting", FormMethod.Post, new { id = "editForm" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        @* Hidden field for JobID *@
+                        @Html.HiddenFor(model => model.JobID, new { id = "JobID" })
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", id = "Title" } })
+                                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-2">
+                            @Html.LabelFor(model => model.Company, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Company, new { htmlAttributes = new { @class = "form-control", id = "Company" } })
+                                @Html.ValidationMessageFor(model => model.Company, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-2">
+                            @Html.LabelFor(model => model.EmploymentTypeID, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.EmploymentTypeID, (IEnumerable<SelectListItem>)ViewBag.EmploymentTypeList, "Select Employment Type", new { @class = "form-control", id = "EditEmploymentTypeDropdown" })
+                                @Html.ValidationMessageFor(model => model.EmploymentTypeID, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-2">
+                            @Html.LabelFor(model => model.MinimumExperience, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.MinimumExperience, new { htmlAttributes = new { @class = "form-control", id = "MinimumExperience" } })
+                                @Html.ValidationMessageFor(model => model.MinimumExperience, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-2">
+                            <label>Description</label>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.JobDescription, new { htmlAttributes = new { @class = "form-control", id = "JobDescription" } })
+                                @Html.ValidationMessageFor(model => model.JobDescription, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-2">
+                            <label>Skill</label>
+                            <div class="col-md-10">
+                                @Html.ListBoxFor(model => model.SelectedSkills, (MultiSelectList)ViewBag.SkillsList, new { @class = "form-control", id = "editDdlSkill", multiple = "multiple" })
+                                @Html.ValidationMessageFor(model => model.SelectedSkills, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-2">
+                            <label>Attachments</label>
+                            <div class="col-md-10">
+                                @if (ViewBag.AttachmentsList != null)
+                                {
+                                    foreach (var attachment in ViewBag.AttachmentsList as List<SelectListItem>)
+                                    {
+                                        <div class="form-check">
+                                            <input type="checkbox"
+                                                   name="SelectedAttachmentTypes"
+                                                   value="@attachment.Value"
+                                                   id="edit_attachment_@attachment.Value"
+                                                   class="form-check-input"
+                                                   @(Model != null && Model.SelectedAttachmentTypes != null && Model.SelectedAttachmentTypes.Contains(Convert.ToInt32(attachment.Value)) ? "checked" : "") />
+                                            <label class="form-check-label" for="edit_attachment_@attachment.Value">@attachment.Text</label>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p>No attachments available.</p>
+                                }
+                                @Html.ValidationMessageFor(model => model.SelectedAttachmentTypes, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                <div class="form-check form-switch">
+                                    @Html.CheckBoxFor(model => model.IsActive, new { @class = "form-check-input", id = "editIsActiveSwitch" })
+                                    <label class="form-check-label" for="editIsActiveSwitch">
+                                        @(Model != null && Model.IsActive ? "Active" : "Inactive")
+                                    </label>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.IsClosed, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                <div class="form-check form-switch">
+                                    @Html.CheckBoxFor(model => model.IsClosedValue, new { @class = "form-check-input", id = "editIsClosedSwitch" })
+                                    <label class="form-check-label" for="editIsClosedSwitch">
+                                        @(Model != null && Model.IsClosed.GetValueOrDefault() ? "Closed" : "Not Yet")
+                                    </label>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.IsClosed, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
                     </div>
-                }
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Apply to Job Modal -->
+<div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="applyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="applyModalLabel">Apply to Job</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Job Title:</strong> <span id="jobTitle"></span></p>
+                <p><strong>Job Description:</strong> <span id="jobDescription"></span></p>
+                <p><strong>Min. Experience:</strong> <span id="minExperience"></span> years</p>
+                <p><strong>Skills:</strong> <span id="jobSkills"></span></p>
+
+                <form id="applyForm">
+                    <input type="hidden" id="jobId" name="jobId"> <!-- Menyimpan JobID -->
+
+                    <div class="form-group">
+                        <label for="alumni">Alumni</label>
+                        <select class="form-control" id="alumni" name="alumni">
+                            <option value="">Select Alumni</option>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+
+                    @*<div class="row">
+                        @foreach (var attachment in ViewBag.AttachmentTypes)
+                        {
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="@attachment.Name" class="form-label">@attachment.Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-paperclip"></i></span>
+                                        <input type="file" class="form-control" id="@attachment.Name" name="attachments[@attachment.Id]">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>*@
+
+                    <div class="form-group">
+                        <label for="cv">Curriculum Vitae</label>
+                        <input type="file" class="form-control-file" id="cv" name="cv">
+                    </div>
+                    <div class="form-group">
+                        <label for="id-card">Identity Card</label>
+                        <input type="file" class="form-control-file" id="id-card" name="id-card">
+                    </div>
+                    <div class="form-group">
+                        <label for="certificate">Certificate</label>
+                        <input type="file" class="form-control-file" id="certificate" name="certificate">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="saveButton" class="btn btn-primary">Save changes</button>
             </div>
         </div>
     </div>
-
-
-    @*-------------------Edit Modal-------------------*@
-
 </div>
+
 
 @section scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function () {
-            var table = $('#jobPostingData').DataTable({
+            var table = $('#jpData').DataTable({
                 "ajax": {
                     "url": "@Url.Action("GetJobPostings", "JobPosting")",
                     "type": "GET",
-                    "datatype": "json",
-                    "dataSrc": "data"
+                    "datatype": "json"
                 },
                 "columns": [
                     {
                         "data": null,
                         "render": function (data, type, row) {
-                            return '<input type="checkbox" class="selectCheckbox" data-id="' + row.JobID + '" />';
-                        }
-                    },
-                    {
-                        "data": null,
-                        "render": function (data, type, row) {
-                            var editLink = '@Url.Action("Edit", "JobPosting", new { id = "PLACEHOLDER" })'.replace("PLACEHOLDER", row.JobID);
+                            var createApplyJobLink = '@Url.Action("CreateApplyJob", "JobPosting", new { jobId = "PLACEHOLDER" })'.replace("PLACEHOLDER", row.JobID);
+                            var candidatesLink = '@Url.Action("Index", "Candidate", new { jobId = "PLACEHOLDER" })'.replace("PLACEHOLDER", row.JobID);
                             return '<div style="display: flex; gap: 5px;">' +
-                                   '<a href="javascript:void(0);" class="btn btn-primary" data-id="' + row.JobID + '" id="editButton" style="margin-left: 5px;">Edit</a>' +
-                                   '<button id="deleteButton" class="btn btn-danger deleteButton" data-id="' + row.JobID + '" style="margin-left: 5px;">Delete</button>' +
-                                   '</div>';
+                                '<a href="javascript:void(0);" class="btn btn-primary editButton" data-id="' + row.JobID + '">Edit</a>' +
+                                '<a href="' + createApplyJobLink + '" class="btn btn-success" data-id="' + row.JobID + '" id="applyButton" style="margin-left: 5px;">Apply Job</a>' +
+                                '<a href="' + candidatesLink + '" class="btn btn-info" data-id="' + row.JobID + '" id="candidatesButton" style="margin-left: 5px;">Candidates</a>' +
+                                '<button class="btn btn-danger deleteButton" data-id="' + row.JobID + '">Delete</button>' +
+                                '</div>';
                         }
                     },
                     {
@@ -171,11 +458,17 @@
                     },
                     { "data": "Title" },
                     { "data": "JobDescription" },
-                    { "data": "TotalCandidates" },
+                    //{ "data": "Company" },
                     {
                         "data": "IsActive",
                         "render": function (data, type, row) {
-                            return data ? 'Active' : 'Inactive';
+                            return data ? "Active" : "Closed";
+                        }
+                    },
+                    {
+                        "data": "IsClosed",
+                        "render": function (data, type, row) {
+                            return data ? "Active" : "Closed";
                         }
                     },
                     {
@@ -183,11 +476,11 @@
                         "render": function (data, type, row) {
                             return moment(data).format('DD-MMM-YYYY hh:mm:ss A');
                         }
-                    }
+                    },
                 ],
                 "dom": '<"top"f>rt<"bottom"lpi><"clear">',
                 "pagingType": "full_numbers",
-                "pageLength": 5,
+                "pageLength": 10,
                 "lengthMenu": [5, 10, 20, 30, 100],
                 "scrollY": "400px",
                 "scrollX": true,
@@ -202,9 +495,10 @@
                     }
                 }
             });
-
-            $('#jobPostingData_filter input').unbind();
-            $('#jobPostingData_filter input').on('keyup', function (e) {
+            $('#jpData_filter input').attr('placeholder', 'Search...');
+            $('#jpData_filter').css({ 'float': 'right', 'text-align': 'right' });
+            $('#jpData_filter input').unbind();
+            $('#jpData_filter input').on('keyup', function (e) {
                 var value = $(this).val();
                 if (value.length >= 3 || value.length === 0) {
                     table.search(value).draw();
@@ -244,67 +538,122 @@
                 });
             });
 
-            $('#selectAll').on('click', function () {
-                var rows = table.rows({ 'search': 'applied' }).nodes();
-                $('input[type="checkbox"]', rows).prop('checked', this.checked);
-            });
-
-            $('#deleteSelected').on('click', function () {
-                var selectedIds = [];
-                $('.selectCheckbox:checked').each(function () {
-                    selectedIds.push($(this).data('id'));
+            //Inisiasi Select2 Dropdown
+            $('#createModal').on('shown.bs.modal', function () {
+                $('#createModal #ddlSkill').select2({
+                    placeholder: 'Select Skill',
+                    allowClear: true,
+                    dropdownParent: $('#createModal')
                 });
-                if (selectedIds.length > 0) {
-                    Swal.fire({
-                        title: "Are you sure? you will not be able to recover these items!",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: "Yes, delete them!",
-                        cancelButtonText: "No, keep them"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $.ajax({
-                                url: '/JobPosting/DeleteSelected',
-                                type: 'POST',
-                                data: { ids: selectedIds },
-                                traditional: true,
-                                success: function (response) {
-                                    if (response.success) {
-                                        Swal.fire("Deleted!", response.message, "success").then(() => {
-                                            table.ajax.reload();
-                                        });
-                                    } else {
-                                        Swal.fire("Error!", response.message, "error");
-                                    }
-                                },
-                                error: function (error) {
-                                    Swal.fire("Error!", "Unable to delete the items. Please try again.", "error");
-                                }
-                            });
-                        } else if (result.dismiss === Swal.DismissReason.cancel) {
-                            Swal.fire("Cancelled", "Your items are safe :)", "error");
-                        }
-                    });
-                } else {
-                    Swal.fire("No items selected", "Please select items to delete.", "info");
-                }
             });
 
+            $('#editModal').on('shown.bs.modal', function () {
+                $('#editModal #editDdlSkill').select2({
+                    placeholder: 'Select Skill',
+                    allowClear: true,
+                    dropdownParent: $('#editModal')
+                });
+            });
+
+            //Create form JS
             $('#createForm').submit(function (e) {
                 e.preventDefault();
+
                 $.ajax({
-                    url: $(this).attr('action'),
+                    url: $(this).attr('action'), // Form action URL
                     type: 'POST',
                     data: $(this).serialize(),
                     success: function (response) {
                         if (response.success) {
-                            $('#createModal').modal('hide');
+                            $('#createModal').modal('hide'); // Close modal
                             $('#createForm')[0].reset();
-                            table.ajax.reload();
+                            $('#jpData').DataTable().ajax.reload(); // Reload DataTable
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Success',
-                                text: "Job Posted successfully",
+                                text: "Job posting added succesfully",
+                                timer: 5000,
+                                timerProgressBar: true,
+                                showConfirmButton: false
+                            });
+
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.errorMsg,
+                                showConfirmButton: true // Show OK button
+                            });
+
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error(xhr.responseText);
+                        alert('An error occurred while saving.');
+                    }
+                });
+            });
+
+            //Edit form JS
+            $(document).on('click', '.editButton', function () {
+                var jobPostingID = $(this).data('id'); // CHANGE VARIABLE NAME
+                // Make an AJAX request to get the data for the selected ProductCategory
+                $.ajax({
+                    url: '/JobPosting/GetJobPostingID/', // CHANGE THE URL
+                    type: 'GET',
+                    data: { jobPostingID: jobPostingID }, // Send as query param
+                    dataType: 'json',
+                    success: function (response) {
+                        // Populate the form fields with the data returned from the server // CHANGE THE CONTENTS
+                        $('#editModal #JobID').val(response.JobID); // Assuming you have a hidden field for ID
+                        $('#editModal #Title').val(response.Title);
+                        $('#editModal #Company').val(response.Company);
+                        $('#editModal #JobDescription').val(response.JobDescription);
+                        $('#EditEmploymentTypeDropdown').val(response.EmploymentTypeID);
+                        $('#editModal #MinimumExperience').val(response.MinimumExperience);
+
+                        $('#editIsActiveSwitch').prop('checked', response.IsActive);
+                        $('#editIsClosedSwitch').prop('checked', response.IsClosedValue);
+
+                        $('#editDdlSkill').val(response.SelectedSkills).trigger('change');
+
+                        $('input[name="SelectedAttachmentTypes"]').prop('checked', false);
+                        if (response.SelectedAttachmentTypes) {
+                            response.SelectedAttachmentTypes.forEach(function (typeId) {
+                                $('#edit_attachment_' + typeId).prop('checked', true);
+                            });
+                        }
+
+                        // Show the Edit Modal
+                        $('#editModal').modal('show');
+                    },
+                    error: function (xhr) {
+                        console.error(xhr.responseText);
+                        alert('An error occurred while fetching data.');
+                    }
+                });
+            });
+
+            $('#editForm').submit(function (e) {
+                e.preventDefault();
+
+                var formData = new FormData(this); // Use FormData for file uploads
+
+                $.ajax({
+                    url: $(this).attr('action'), // Form action URL
+                    type: 'POST',
+                    data: formData,
+                    processData: false, // Prevent jQuery from processing data
+                    contentType: false, // Ensure correct content type for file upload
+                    success: function (response) {
+                        if (response.success) {
+                            $('#editModal').modal('hide'); // Close the modal
+                            $('#editForm')[0].reset(); // Reset the form
+                            $('#jpData').DataTable().ajax.reload(); // Reload DataTable
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: "Edit Job Posting Successful",
                                 timer: 5000,
                                 timerProgressBar: true,
                                 showConfirmButton: false
@@ -325,5 +674,107 @@
                 });
             });
         });
+        $(document).ready(function () {
+    // Handle "Apply to Job" button click
+    $(document).on('click', '.atjButton', function () {
+        // Ambil data dari atribut data-*
+        var jobId = $(this).data('id');
+        var title = $(this).data('title');
+        var description = $(this).data('description');
+        var experience = $(this).data('experience');
+        var skills = $(this).data('skills');
+
+        // Isi modal dengan data
+        $('#jobTitle').text(title);
+        $('#jobDescription').text(description);
+        $('#minExperience').text(experience);
+        $('#jobSkills').text(skills);
+        $('#jobId').val(jobId); // Simpan JobID di hidden input
+
+        // Tampilkan modal
+        $('#applyModal').modal('show');
+    });
+
+    // Handle form submission
+    $('#saveButton').on('click', function () {
+        var formData = new FormData($('#applyForm')[0]);
+
+        $.ajax({
+            url: '@Url.Action("CreateApplyJob", "JobPosting")',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Application submitted successfully!',
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    }).then(function () {
+                        $('#applyModal').modal('hide');
+                        $('#jpData').DataTable().ajax.reload(); // Reload DataTable
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message || 'Failed to submit application.',
+                        showConfirmButton: true
+                    });
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while submitting the application.',
+                    showConfirmButton: true
+                });
+            }
+        });
+    });
+});
+    </script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".atjButton").forEach(function (button) {
+            button.addEventListener("click", function () {
+                let jobId = this.getAttribute("data-id");
+                let title = this.getAttribute("data-title");
+                let description = this.getAttribute("data-description");
+                let experience = this.getAttribute("data-experience");
+                let skills = this.getAttribute("data-skills");
+
+                document.getElementById("jobTitle").textContent = title;
+                document.getElementById("jobDescription").textContent = description;
+                document.getElementById("minExperience").textContent = experience;
+                document.getElementById("jobSkills").textContent = skills;
+                document.getElementById("jobId").value = jobId; // Simpan JobID di hidden input
+            });
+        });
+
+        // Handle submit form
+        document.getElementById("saveButton").addEventListener("click", function () {
+            let formData = new FormData(document.getElementById("applyForm"));
+            fetch("@Url.Action("CreateApplyJob", "JobPosting")", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Application submitted successfully!");
+                    location.reload();
+                } else {
+                    alert("Error submitting application.");
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    });
     </script>
 }
