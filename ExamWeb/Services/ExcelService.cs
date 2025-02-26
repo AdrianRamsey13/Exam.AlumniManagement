@@ -337,7 +337,7 @@ namespace ExamWeb.Services
             {
                 int AlumniID = ConvertAlumniID(worksheet, i);
                 string FirstName = worksheet.Cells[i, 1].StringValue;
-                string MiddleName = worksheet.Cells[i, 2].StringValue;
+                string MiddleName = (worksheet.Cells[i, 2].StringValue ?? "");
                 string LastName = worksheet.Cells[i, 3].StringValue;
                 string Email = worksheet.Cells[i, 4].StringValue;
                 string MobileNumber = worksheet.Cells[i, 5].StringValue;

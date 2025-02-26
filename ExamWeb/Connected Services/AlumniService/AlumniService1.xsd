@@ -167,10 +167,22 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="UpsertMultipleAlumni">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="alumnis" nillable="true" type="q10:ArrayOfAlumniDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpsertMultipleAlumniResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="UpsertAlumni">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="alumni" nillable="true" type="q10:AlumniDTO" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" minOccurs="0" name="alumni" nillable="true" type="q11:AlumniDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

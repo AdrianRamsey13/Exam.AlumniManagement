@@ -4,10 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Aspose.Cells.Drawing;
+using ExamWeb.AlumniImageService;
 using ExamWeb.Interfaces;
-using ExamWeb.JobPostingService;
 using ExamWeb.Models;
 using ExamWeb.Services;
+using WebGrease.Activities;
 
 namespace ExamWeb.Controllers
 {
@@ -23,8 +25,15 @@ namespace ExamWeb.Controllers
             _jpRepository = new JobPostingRepository();
             _alumniRepository = new AlumniRepository();
         }
-
         // GET: JobPosting
+        public JsonResult GetJobPostings()
+        {
+            var data = _jpRepository.GetJobPostings();
+            var json = Json(new { data = data }, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
         public ActionResult Index()
         {
             var skills = _jpRepository.GetSkills()
@@ -49,13 +58,68 @@ namespace ExamWeb.Controllers
             return View();
         }
 
-        public JsonResult GetJobPostings()
+        // GET: JobPosting/Details/5
+        public ActionResult Details(int id)
         {
-            var data = _jpRepository.GetJobPostings();
-            var json = Json(new { data = data }, JsonRequestBehavior.AllowGet);
-            json.MaxJsonLength = int.MaxValue;
-            return json;
+            return View();
         }
+
+        // GET: JobPosting/Create
+        public ActionResult Create()
+        {
+            var model = new JobPostingModel(); // Ensure an instance is created
+
+            // Populate ViewBag data
+            ViewBag.EmploymentTypeList = _jpRepository.GetEmploymentTypes()
+                .Select(a => new SelectListItem
+                {
+                    Value = a.EmploymentTypeID.ToString(),
+                    Text = a.Name
+                })
+                .ToList();
+
+            ViewBag.SkillsList = new MultiSelectList(_jpRepository.GetSkills()
+                .Select(s => new { Value = s.SkillID, Text = s.Name })
+                .ToList(), "Value", "Text");
+
+            ViewBag.AttachmentsList = _jpRepository.GetAttachmentTypes()
+                .Select(a => new SelectListItem
+                {
+                    Value = a.AttachmentTypeID.ToString(),
+                    Text = a.Name
+                })
+                .ToList();
+
+            return View(model); // Pass the initialized model
+        }
+
+
+
+        // POST: JobPosting/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(JobPostingModel jobPosting)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _jpRepository.InsertJobPosting(jobPosting);
+                    return Json(new { success = true });
+                }
+                return Json(new { error = true, errorMsg = "Error adding job posting" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error deleting job posting: " + ex.Message });
+            }
+        }
+
+        // GET: JobPosting/Edit/5
+        //public ActionResult Edit(int id)
+        //{
+        //    return View();
+        //}
 
         public JsonResult GetJobPostingID(Guid jobPostingID)
         {
@@ -83,36 +147,56 @@ namespace ExamWeb.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-
-        public ActionResult CreateApplyJob(Guid jobId)
+        // POST: JobPosting/Edit/5
+        [HttpPost]
+        public ActionResult Edit(JobPostingModel jobPosting)
         {
-            var job = _jpRepository.GetJobPostingByID(jobId);
-            if (job == null)
+            try
             {
-                return HttpNotFound(); // Jika job tidak ditemukan, kembalikan 404
-            }
-
-            // Siapkan ViewBag
-            ViewBag.JobPosted = job;
-            ViewBag.JobTitle = job.Title;
-            ViewBag.JobDescription = job.JobDescription;
-            ViewBag.MinExperience = job.MinimumExperience;
-            ViewBag.Skills = job.SkillDisplay;
-            ViewBag.JobID = jobId;
-            ViewBag.AttachmentTypes = job.AttachmentTypeDisplay?.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
-
-            // Ambil daftar alumni dan buat SelectList
-            ViewBag.AlumniList = _alumniRepository.GetAlumnis()
-                .Select(a => new SelectListItem
+                var existingData = _jpRepository.GetJobPostingByID(jobPosting.JobID);
+                if (existingData == null)
                 {
-                    Value = a.AlumniID.ToString(),
-                    Text = $"{a.FirstName} {(a.MiddleName?.Trim() ?? "")} {a.LastName}".Trim()
-                })
-                .ToList();
+                    return HttpNotFound();
+                }
+                existingData.ModifiedDate = DateTime.Now;
+                _jpRepository.UpdateJobPosting(jobPosting);
+                TempData["SuccessMessage"] = "Alumni updated successfully!";
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Unable to save job posting: " + ex.Message);
+                return Json(new { error = true, errorMsg = ex.Message });
+            }
+        }
 
+        // GET: JobPosting/Delete/5
+        public ActionResult Delete(int id)
+        {
             return View();
         }
 
+        // POST: JobPosting/Delete/5
+        [HttpPost]
+        public ActionResult Delete(Guid id, FormCollection collection)
+        {
+            try
+            {
+                var existingData = _jpRepository.GetJobPostingByID(id);
+                if (existingData == null)
+                {
+                    return HttpNotFound();
+                }
+                _jpRepository.DeleteJobPosting(id);
+                return Json(new { success = true, message = "Job posting deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error deleting job posting: " + ex.Message });
+            }
+        }
+
+        [HttpPost]
         public JsonResult ApplyToJob(HttpPostedFileBase[] attachments, int[] AttachmentTypeIDs, JobAttachmentModel jobAttachments)
         {
             try
@@ -139,10 +223,10 @@ namespace ExamWeb.Controllers
                             var filePath = Path.Combine(Server.MapPath(jobAttachmentsPath), fileName);
                             file.SaveAs(filePath);
 
-                            var random = new Random();
                             var jobAttachment = new JobAttachmentModel
                             {
-                                AttachmentID = random.Next(100000, 999999), // 🎲 Random int 6 digit
+                                //Randomize AttachmentID
+                                AttachmentID = new Random().Next(1000, 9999),
                                 JobID = jobAttachments.JobID,
                                 AlumniID = jobAttachments.AlumniID,
                                 AttachmentTypeID = Convert.ToByte(attachmentTypeID), // ✅ Now properly assigned
@@ -166,23 +250,6 @@ namespace ExamWeb.Controllers
             catch (Exception ex)
             {
                 return Json(new { success = false, message = "Error: " + ex.Message });
-            }
-        }
-
-        public ActionResult UpsertJobPosting(JobPostingModel jobPosting)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    _jpRepository.UpsertJobPosting(jobPosting);
-                    return Json(new { success = true });
-                }
-                return Json(new { error = true, errorMsg = "Error adding job posting" });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = "Error deleting job posting: " + ex.Message });
             }
         }
 
@@ -211,98 +278,16 @@ namespace ExamWeb.Controllers
             return Json(new { success = jobDetails != null, jobDetails, alumnis, requiredAttachments }, JsonRequestBehavior.AllowGet);
         }
 
-        private JobAttachmentDTO SaveAttachment(HttpPostedFileBase file, int alumniId, Guid jobId, byte attachmentType)
-        {
-            string uploadsFolder = Server.MapPath("~/Uploads");
-            if (!Directory.Exists(uploadsFolder))
-                Directory.CreateDirectory(uploadsFolder);
-
-            string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-            file.SaveAs(filePath);
-
-            return new JobAttachmentDTO
-            {
-                AlumniID = alumniId,
-                JobID = jobId,
-                AttachmentTypeID = attachmentType,
-                FilePath = "/Uploads/" + uniqueFileName,
-                FileName = file.FileName,
-                //ApplyDate = DateTime.Now
-            };
-        }
-
-
-        // POST: JobPosting/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(JobPostingModel jobPosting)
+        public ActionResult UpsertJobPosting(JobPostingModel jobPosting)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    if(jobPosting.SelectedAttachmentTypes == null || jobPosting.SelectedSkills == null)
-                    {
-                        return Json(new { success = false, message = "Attachment types and skills are required." });
-                    }
-                    //_jpRepository.InsertJobPosting(jobPosting);
-                    //jobPosting.JobID = Guid.NewGuid();
-                    //jobPosting.ModifiedDate = DateTime.Now;
                     _jpRepository.UpsertJobPosting(jobPosting);
-                    return Json(new { success = true , message = "Job posting created successfully." });
-                }
-                //dihapus diganti dengan yang lain, return viewnya, bukan swal
-                //return Json(new { error = true, errorMsg = "Error adding job posting" });
-                return View(jobPosting);
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, errorMsg = "Error deleting job posting: " + ex.Message });
-            }
-        }
-
-        // POST: JobPosting/Edit/5
-        [HttpPost]
-        public ActionResult Edit(JobPostingModel jobPosting)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    var existingData = _jpRepository.GetJobPostingByID(jobPosting.JobID);
-                    if (existingData == null)
-                    {
-                        return HttpNotFound();
-                    }
-                    existingData.ModifiedDate = DateTime.Now;
-                    _jpRepository.UpsertJobPosting(jobPosting);
-                    TempData["SuccessMessage"] = "Alumni updated successfully!";
                     return Json(new { success = true });
                 }
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", "Unable to save job posting: " + ex.Message);
-                return Json(new { error = true, errorMsg = ex.Message });
-            }
-            return View(jobPosting);
-        }
-        //------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        // POST: JobPosting/Delete/5
-        [HttpPost]
-        public ActionResult Delete(Guid id, FormCollection collection)
-        {
-            try
-            {
-                var existingData = _jpRepository.GetJobPostingByID(id);
-                if (existingData == null)
-                {
-                    return HttpNotFound();
-                }
-                _jpRepository.DeleteJobPosting(id);
-                return Json(new { success = true, message = "Job posting deleted successfully" });
+                return Json(new { error = true, errorMsg = "Error adding job posting" });
             }
             catch (Exception ex)
             {

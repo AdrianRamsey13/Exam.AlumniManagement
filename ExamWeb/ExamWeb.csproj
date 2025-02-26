@@ -473,6 +473,7 @@
   <ItemGroup>
     <Folder Include="App_Data\AlumniImages\" />
     <Folder Include="App_Data\AlumniPhotos\" />
+    <Folder Include="App_Data\JobAttachments\" />
     <Folder Include="Views\JobApplication\" />
   </ItemGroup>
   <ItemGroup>

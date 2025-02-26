@@ -69,5 +69,7 @@ namespace ExamWeb.Services
         {
             _alumniServiceClient.DeleteAlumni(alumniId);
         }
+
+   
     }
 }

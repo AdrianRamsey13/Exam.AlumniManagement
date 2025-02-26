@@ -25,6 +25,34 @@
             overflow: hidden;
             white-space: nowrap; /* Agar tidak terjadi wrapping yang tidak diinginkan */
         }
+
+        #scrollTopBtn {
+            display: none; /* Tombol akan tersembunyi secara default */
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 99;
+            font-size: 16px;
+            border: none;
+            outline: none;
+            background-color: #007bff; /* Warna biru */
+            color: white;
+            cursor: pointer;
+            padding: 12px 16px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+            #scrollTopBtn:hover {
+                background-color: #0056b3; /* Warna biru lebih gelap saat hover */
+            }
+
+            #scrollTopBtn.show {
+                display: block;
+                opacity: 1;
+                transform: translateY(0);
+            }
     </style>
 }
 
@@ -41,14 +69,35 @@
 @*delete checkbox*@
 <button id="deleteSelected" class="btn btn-danger">Delete Selected</button>
 
-@using (Html.BeginForm("AlumniImportToExcel", "Alumni", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    <div class="mt-2 d-flex align-items-center gap-2">
-        <input type="file" accept=".xlsx, .xls" required name="file" class="form-control w-auto" />
-        <button class="btn btn-primary" type="submit">Upload</button>
-    </div>
+<!-- Button to Open the Modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+    Upload File
+</button>
 
-}
+<!-- The Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadModalLabel">Upload Alumni Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("AlumniImportToExcel", "Alumni", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Select Excel File (.xlsx, .xls)</label>
+                        <input type="file" accept=".xlsx, .xls" required name="file" class="form-control" />
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-success">Upload</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
 <div style="overflow-x: auto; max-width: 100%;">
     <table class="table" id="alumnisData" style="width:100%">
         <thead>
@@ -72,6 +121,10 @@
         </thead>
     </table>
 </div>
+
+<button onclick="scrollToTop()" id="scrollTopBtn" title="Go to top">
+    ⬆ Scroll to Top
+</button>
 
 
 <!-- Modal Image Preview-->
@@ -967,6 +1020,22 @@
                 reader.readAsDataURL(file);
             });
         }
+
+        // Tampilkan tombol ketika pengguna scroll ke bawah
+        window.onscroll = function () {
+            var btn = document.getElementById("scrollTopBtn");
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                btn.classList.add("show");
+            } else {
+                btn.classList.remove("show");
+            }
+        };
+
+        // Fungsi untuk scroll ke atas dengan efek smooth
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
 
     </script>
 }

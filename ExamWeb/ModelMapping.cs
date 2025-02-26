@@ -40,6 +40,7 @@ namespace ExamWeb
             CreateMap<HobbyDTO, HobbyModel>().ReverseMap();
             CreateMap<JobPostingDTO, JobPostingModel>().ReverseMap();
             CreateMap<JobPostingService.JobAttachmentDTO, JobAttachmentModel>().ReverseMap();
+            CreateMap<JobCandidateDTO, JobCandidateModel>().ReverseMap();
         }
     }
 }

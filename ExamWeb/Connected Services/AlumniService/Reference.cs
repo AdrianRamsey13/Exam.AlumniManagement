@@ -944,6 +944,12 @@ namespace ExamWeb.AlumniService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/ImportFromExcel", ReplyAction="http://tempuri.org/IAlumniService/ImportFromExcelResponse")]
         System.Threading.Tasks.Task ImportFromExcelAsync(ExamWeb.AlumniService.AlumniDTO alumni);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/UpsertMultipleAlumni", ReplyAction="http://tempuri.org/IAlumniService/UpsertMultipleAlumniResponse")]
+        void UpsertMultipleAlumni(ExamWeb.AlumniService.AlumniDTO[] alumnis);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/UpsertMultipleAlumni", ReplyAction="http://tempuri.org/IAlumniService/UpsertMultipleAlumniResponse")]
+        System.Threading.Tasks.Task UpsertMultipleAlumniAsync(ExamWeb.AlumniService.AlumniDTO[] alumnis);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/UpsertAlumni", ReplyAction="http://tempuri.org/IAlumniService/UpsertAlumniResponse")]
         void UpsertAlumni(ExamWeb.AlumniService.AlumniDTO alumni);
         
@@ -1080,6 +1086,14 @@ namespace ExamWeb.AlumniService {
         
         public System.Threading.Tasks.Task ImportFromExcelAsync(ExamWeb.AlumniService.AlumniDTO alumni) {
             return base.Channel.ImportFromExcelAsync(alumni);
+        }
+        
+        public void UpsertMultipleAlumni(ExamWeb.AlumniService.AlumniDTO[] alumnis) {
+            base.Channel.UpsertMultipleAlumni(alumnis);
+        }
+        
+        public System.Threading.Tasks.Task UpsertMultipleAlumniAsync(ExamWeb.AlumniService.AlumniDTO[] alumnis) {
+            return base.Channel.UpsertMultipleAlumniAsync(alumnis);
         }
         
         public void UpsertAlumni(ExamWeb.AlumniService.AlumniDTO alumni) {
