@@ -54,9 +54,9 @@ namespace ExamWeb.Services
             _photoServiceClient.InsertPhoto(result, AlbumID);
         }
 
-        public void DeletePhoto(int AlbumID, int id)
+        public void DeletePhoto(int id)
         {
-            _photoServiceClient.DeletePhoto(id, AlbumID);
+            _photoServiceClient.DeletePhoto(id);
         }
     }
 }

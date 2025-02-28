@@ -9,6 +9,7 @@
   <xs:complexType name="PhotoDTO">
     <xs:sequence>
       <xs:element minOccurs="0" name="AlbumID" type="xs:int" />
+      <xs:element minOccurs="0" name="AlbumName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="IsPhotoAlbumThumbnail" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="ModifiedDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="PhotoFileName" nillable="true" type="xs:string" />

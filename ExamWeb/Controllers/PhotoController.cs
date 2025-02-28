@@ -130,18 +130,29 @@ namespace ExamWeb.Controllers
 
         // POST: Photo/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult DeleteSelected(int[] ids)
         {
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                if (ids != null && ids.Length > 0)
+                {
+                    int count = 0;
+                    foreach (var itemID in ids)
+                    {
+                        
+                            _photoRepository.DeletePhoto(itemID);
+                            count += 1;
+                        
+                    }
+                    return Json(new { success = true, message = "Photos have been deleted successfully" });
+                }
+                return Json(new { success = false, message = "No items selected for deletion" });
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return Json(new { success = false, message = "Error deleting items: " + ex.Message });
             }
         }
+
     }
 }

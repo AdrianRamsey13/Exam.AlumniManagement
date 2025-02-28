@@ -20,6 +20,6 @@ namespace ExamWeb.Interfaces
         void InsertPhoto(PhotoModel photo, int AlbumID);
 
         
-        void DeletePhoto(int AlbumID, int id);
+        void DeletePhoto(int id);
     }
 }

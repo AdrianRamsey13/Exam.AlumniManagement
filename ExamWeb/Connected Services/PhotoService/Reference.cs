@@ -26,6 +26,9 @@ namespace ExamWeb.PhotoService {
         private int AlbumIDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string AlbumNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<bool> IsPhotoAlbumThumbnailField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -59,6 +62,19 @@ namespace ExamWeb.PhotoService {
                 if ((this.AlbumIDField.Equals(value) != true)) {
                     this.AlbumIDField = value;
                     this.RaisePropertyChanged("AlbumID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string AlbumName {
+            get {
+                return this.AlbumNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AlbumNameField, value) != true)) {
+                    this.AlbumNameField = value;
+                    this.RaisePropertyChanged("AlbumName");
                 }
             }
         }
@@ -161,10 +177,10 @@ namespace ExamWeb.PhotoService {
         System.Threading.Tasks.Task InsertPhotoAsync(ExamWeb.PhotoService.PhotoDTO photo, int AlbumID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/DeletePhoto", ReplyAction="http://tempuri.org/IPhotoService/DeletePhotoResponse")]
-        void DeletePhoto(int AlbumID, int id);
+        void DeletePhoto(int id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/DeletePhoto", ReplyAction="http://tempuri.org/IPhotoService/DeletePhotoResponse")]
-        System.Threading.Tasks.Task DeletePhotoAsync(int AlbumID, int id);
+        System.Threading.Tasks.Task DeletePhotoAsync(int id);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -218,12 +234,12 @@ namespace ExamWeb.PhotoService {
             return base.Channel.InsertPhotoAsync(photo, AlbumID);
         }
         
-        public void DeletePhoto(int AlbumID, int id) {
-            base.Channel.DeletePhoto(AlbumID, id);
+        public void DeletePhoto(int id) {
+            base.Channel.DeletePhoto(id);
         }
         
-        public System.Threading.Tasks.Task DeletePhotoAsync(int AlbumID, int id) {
-            return base.Channel.DeletePhotoAsync(AlbumID, id);
+        public System.Threading.Tasks.Task DeletePhotoAsync(int id) {
+            return base.Channel.DeletePhotoAsync(id);
         }
     }
 }

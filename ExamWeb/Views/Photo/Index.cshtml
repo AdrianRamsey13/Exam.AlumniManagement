@@ -55,6 +55,7 @@
     <div>
         <button class="btn btn-secondary" onclick="history.back()"><i class="fas fa-arrow-left"></i> Back</button>
         <button id="addPhotoButton" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addModal">Add Photo</button>
+        <button id="deleteSelected" class="btn btn-danger">Delete Selected</button>
     </div>
     <input type="text" id="searchInput" class="form-control search-bar" placeholder="Search photo...">
 </div>
@@ -67,6 +68,7 @@
                 <div class="card photo-card">
                     <img src="@Url.Content(photo.PhotoPath + "/" + photo.PhotoFileName)" class="photo-img" alt="@photo.PhotoFileName">
                 </div>
+                <input type="checkbox" class="delete-checkbox" value="@photo.PhotoID">
             </div>
         }
     </div>
@@ -86,77 +88,184 @@
     <ul class="pagination"></ul>
 </div>
 
-<script>
-    $(document).ready(function () {
-        let photosPerPage = parseInt($("#entriesSelect").val());
-        let photos = $(".photo-item");
-        let totalPhotos = photos.length;
-        let totalPages = Math.ceil(totalPhotos / photosPerPage);
-        let currentPage = 1;
+<!-- Modal Preview -->
+<div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imagePreviewLabel">Image Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="previewImage" class="img-fluid" src="" alt="Preview">
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <button id="prevImage" class="btn btn-secondary">Prev</button>
+                <button id="nextImage" class="btn btn-secondary">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-        function showPhotos() {
-            photos.hide();
-            let start = (currentPage - 1) * photosPerPage;
-            let end = start + photosPerPage;
-            photos.slice(start, end).show();
-            renderPagination();
-        }
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            let photosPerPage = parseInt($("#entriesSelect").val());
+            let photos = $(".photo-item");
+            let totalPhotos = photos.length;
+            let totalPages = Math.ceil(totalPhotos / photosPerPage);
+            let currentPage = 1;
 
-        function renderPagination() {
-            $(".pagination").empty();
-            totalPages = Math.ceil(photos.length / photosPerPage);
+            function showPhotos() {
+                photos.hide();
+                let start = (currentPage - 1) * photosPerPage;
+                let end = start + photosPerPage;
+                photos.slice(start, end).show();
+                renderPagination();
+            }
 
-            let prevDisabled = currentPage === 1 ? 'disabled' : '';
-            let nextDisabled = currentPage === totalPages ? 'disabled' : '';
+            function renderPagination() {
+                $(".pagination").empty();
+                totalPages = Math.ceil(photos.length / photosPerPage);
 
-            $(".pagination").append(
-                `<li class="page-item ${prevDisabled}">
-                    <a class="page-link" href="#" data-page="${currentPage - 1}">« Previous</a>
-                </li>`
-            );
+                let prevDisabled = currentPage === 1 ? 'disabled' : '';
+                let nextDisabled = currentPage === totalPages ? 'disabled' : '';
 
-            for (let i = 1; i <= totalPages; i++) {
                 $(".pagination").append(
-                    `<li class="page-item ${i === currentPage ? 'active' : ''}">
-                        <a class="page-link" href="#" data-page="${i}">${i}</a>
-                    </li>`
+                    `<li class="page-item ${prevDisabled}">
+                                <a class="page-link" href="#" data-page="${currentPage - 1}">« Previous</a>
+                            </li>`
+                );
+
+                for (let i = 1; i <= totalPages; i++) {
+                    $(".pagination").append(
+                        `<li class="page-item ${i === currentPage ? 'active' : ''}">
+                                    <a class="page-link" href="#" data-page="${i}">${i}</a>
+                                </li>`
+                    );
+                }
+
+                $(".pagination").append(
+                    `<li class="page-item ${nextDisabled}">
+                                <a class="page-link" href="#" data-page="${currentPage + 1}">Next »</a>
+                            </li>`
                 );
             }
 
-            $(".pagination").append(
-                `<li class="page-item ${nextDisabled}">
-                    <a class="page-link" href="#" data-page="${currentPage + 1}">Next »</a>
-                </li>`
-            );
-        }
+            $(document).on("click", ".page-link", function (e) {
+                e.preventDefault();
+                let newPage = parseInt($(this).data("page"));
+                if (newPage >= 1 && newPage <= totalPages) {
+                    currentPage = newPage;
+                    showPhotos();
+                }
+            });
 
-        $(document).on("click", ".page-link", function (e) {
-            e.preventDefault();
-            let newPage = parseInt($(this).data("page"));
-            if (newPage >= 1 && newPage <= totalPages) {
-                currentPage = newPage;
+            $("#searchInput").on("keyup", function () {
+                let query = $(this).val().toLowerCase();
+                photos.hide();
+                photos.filter(function () {
+                    return $(this).data("name").toLowerCase().includes(query);
+                }).show();
+                currentPage = 1;
+                totalPages = Math.ceil($(".photo-item:visible").length / photosPerPage);
                 showPhotos();
+            });
+
+            $("#entriesSelect").on("change", function () {
+                photosPerPage = parseInt($(this).val());
+                currentPage = 1;
+                totalPages = Math.ceil(photos.length / photosPerPage);
+                showPhotos();
+            });
+
+            $('#deleteSelected').on('click', function () {
+                var selectedPhotos = $('.delete-checkbox:checked').map(function () {
+                    return $(this).val();
+                }).get();
+
+                if (selectedPhotos.length === 0) {
+                    Swal.fire("No items selected", "Please select items to delete.", "info");
+                    return;
+                }
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover these photos!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete them!",
+                    cancelButtonText: "No, keep them"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/Photo/DeleteSelected',  // Ensure this matches your backend
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify({ ids: selectedPhotos }),
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire("Deleted!", "Selected photos have been deleted.", "success").then(() => {
+                                        selectedPhotos.forEach(function (photoID) {
+                                            $('.photo-card[data-photo-id="' + photoID + '"]').remove();
+                                        });
+                                        location.reload(); // Reload page after deletion
+                                    });
+                                } else {
+                                    Swal.fire("Error!", response.message, "error");
+                                }
+                            },
+                            error: function () {
+                                Swal.fire("Error!", "Unable to delete the photos. Please try again.", "error");
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        Swal.fire("Cancelled", "Your photos are safe :)", "error");
+                    }
+                });
+            });
+
+            showPhotos();
+        });
+    </script>
+    <script>
+        var photos = [];
+        var currentIndex = 0;
+
+        $(document).ready(function () {
+            // Simpan daftar semua foto dalam array
+            $('.photo-item img').each(function (index) {
+                photos.push($(this).attr('src'));
+            });
+
+            // Klik gambar untuk menampilkan modal preview
+            $('.photo-item img').on('click', function () {
+                currentIndex = $('.photo-item img').index(this);
+                showImage(currentIndex);
+                $('#imagePreviewModal').modal('show');
+            });
+
+            // Fungsi untuk menampilkan gambar berdasarkan index
+            function showImage(index) {
+                $('#previewImage').attr('src', photos[index]);
             }
-        });
 
-        $("#searchInput").on("keyup", function () {
-            let query = $(this).val().toLowerCase();
-            photos.hide();
-            photos.filter(function () {
-                return $(this).data("name").toLowerCase().includes(query);
-            }).show();
-            currentPage = 1;
-            totalPages = Math.ceil($(".photo-item:visible").length / photosPerPage);
-            showPhotos();
-        });
+            // Next Image
+            $('#nextImage').on('click', function () {
+                if (currentIndex < photos.length - 1) {
+                    currentIndex++;
+                    showImage(currentIndex);
+                }
+            });
 
-        $("#entriesSelect").on("change", function () {
-            photosPerPage = parseInt($(this).val());
-            currentPage = 1;
-            totalPages = Math.ceil(photos.length / photosPerPage);
-            showPhotos();
+            // Prev Image
+            $('#prevImage').on('click', function () {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    showImage(currentIndex);
+                }
+            });
         });
-
-        showPhotos();
-    });
-</script>
+    </script>
+}
