@@ -143,34 +143,28 @@ namespace ExamWeb.PhotoService {
     public interface IPhotoService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/GetPhotos", ReplyAction="http://tempuri.org/IPhotoService/GetPhotosResponse")]
-        ExamWeb.PhotoService.PhotoDTO[] GetPhotos();
+        ExamWeb.PhotoService.PhotoDTO[] GetPhotos(int AlbumID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/GetPhotos", ReplyAction="http://tempuri.org/IPhotoService/GetPhotosResponse")]
-        System.Threading.Tasks.Task<ExamWeb.PhotoService.PhotoDTO[]> GetPhotosAsync();
+        System.Threading.Tasks.Task<ExamWeb.PhotoService.PhotoDTO[]> GetPhotosAsync(int AlbumID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/GetPhotoByID", ReplyAction="http://tempuri.org/IPhotoService/GetPhotoByIDResponse")]
-        ExamWeb.PhotoService.PhotoDTO GetPhotoByID(int id);
+        ExamWeb.PhotoService.PhotoDTO GetPhotoByID(int AlbumID, int id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/GetPhotoByID", ReplyAction="http://tempuri.org/IPhotoService/GetPhotoByIDResponse")]
-        System.Threading.Tasks.Task<ExamWeb.PhotoService.PhotoDTO> GetPhotoByIDAsync(int id);
+        System.Threading.Tasks.Task<ExamWeb.PhotoService.PhotoDTO> GetPhotoByIDAsync(int AlbumID, int id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/InsertPhoto", ReplyAction="http://tempuri.org/IPhotoService/InsertPhotoResponse")]
-        void InsertPhoto(ExamWeb.PhotoService.PhotoDTO photo);
+        void InsertPhoto(ExamWeb.PhotoService.PhotoDTO photo, int AlbumID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/InsertPhoto", ReplyAction="http://tempuri.org/IPhotoService/InsertPhotoResponse")]
-        System.Threading.Tasks.Task InsertPhotoAsync(ExamWeb.PhotoService.PhotoDTO photo);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/UpdatePhoto", ReplyAction="http://tempuri.org/IPhotoService/UpdatePhotoResponse")]
-        void UpdatePhoto(ExamWeb.PhotoService.PhotoDTO photo);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/UpdatePhoto", ReplyAction="http://tempuri.org/IPhotoService/UpdatePhotoResponse")]
-        System.Threading.Tasks.Task UpdatePhotoAsync(ExamWeb.PhotoService.PhotoDTO photo);
+        System.Threading.Tasks.Task InsertPhotoAsync(ExamWeb.PhotoService.PhotoDTO photo, int AlbumID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/DeletePhoto", ReplyAction="http://tempuri.org/IPhotoService/DeletePhotoResponse")]
-        void DeletePhoto(int id);
+        void DeletePhoto(int AlbumID, int id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/DeletePhoto", ReplyAction="http://tempuri.org/IPhotoService/DeletePhotoResponse")]
-        System.Threading.Tasks.Task DeletePhotoAsync(int id);
+        System.Threading.Tasks.Task DeletePhotoAsync(int AlbumID, int id);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -200,44 +194,36 @@ namespace ExamWeb.PhotoService {
                 base(binding, remoteAddress) {
         }
         
-        public ExamWeb.PhotoService.PhotoDTO[] GetPhotos() {
-            return base.Channel.GetPhotos();
+        public ExamWeb.PhotoService.PhotoDTO[] GetPhotos(int AlbumID) {
+            return base.Channel.GetPhotos(AlbumID);
         }
         
-        public System.Threading.Tasks.Task<ExamWeb.PhotoService.PhotoDTO[]> GetPhotosAsync() {
-            return base.Channel.GetPhotosAsync();
+        public System.Threading.Tasks.Task<ExamWeb.PhotoService.PhotoDTO[]> GetPhotosAsync(int AlbumID) {
+            return base.Channel.GetPhotosAsync(AlbumID);
         }
         
-        public ExamWeb.PhotoService.PhotoDTO GetPhotoByID(int id) {
-            return base.Channel.GetPhotoByID(id);
+        public ExamWeb.PhotoService.PhotoDTO GetPhotoByID(int AlbumID, int id) {
+            return base.Channel.GetPhotoByID(AlbumID, id);
         }
         
-        public System.Threading.Tasks.Task<ExamWeb.PhotoService.PhotoDTO> GetPhotoByIDAsync(int id) {
-            return base.Channel.GetPhotoByIDAsync(id);
+        public System.Threading.Tasks.Task<ExamWeb.PhotoService.PhotoDTO> GetPhotoByIDAsync(int AlbumID, int id) {
+            return base.Channel.GetPhotoByIDAsync(AlbumID, id);
         }
         
-        public void InsertPhoto(ExamWeb.PhotoService.PhotoDTO photo) {
-            base.Channel.InsertPhoto(photo);
+        public void InsertPhoto(ExamWeb.PhotoService.PhotoDTO photo, int AlbumID) {
+            base.Channel.InsertPhoto(photo, AlbumID);
         }
         
-        public System.Threading.Tasks.Task InsertPhotoAsync(ExamWeb.PhotoService.PhotoDTO photo) {
-            return base.Channel.InsertPhotoAsync(photo);
+        public System.Threading.Tasks.Task InsertPhotoAsync(ExamWeb.PhotoService.PhotoDTO photo, int AlbumID) {
+            return base.Channel.InsertPhotoAsync(photo, AlbumID);
         }
         
-        public void UpdatePhoto(ExamWeb.PhotoService.PhotoDTO photo) {
-            base.Channel.UpdatePhoto(photo);
+        public void DeletePhoto(int AlbumID, int id) {
+            base.Channel.DeletePhoto(AlbumID, id);
         }
         
-        public System.Threading.Tasks.Task UpdatePhotoAsync(ExamWeb.PhotoService.PhotoDTO photo) {
-            return base.Channel.UpdatePhotoAsync(photo);
-        }
-        
-        public void DeletePhoto(int id) {
-            base.Channel.DeletePhoto(id);
-        }
-        
-        public System.Threading.Tasks.Task DeletePhotoAsync(int id) {
-            return base.Channel.DeletePhotoAsync(id);
+        public System.Threading.Tasks.Task DeletePhotoAsync(int AlbumID, int id) {
+            return base.Channel.DeletePhotoAsync(AlbumID, id);
         }
     }
 }

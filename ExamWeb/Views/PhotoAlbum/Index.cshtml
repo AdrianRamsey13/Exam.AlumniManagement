@@ -50,18 +50,25 @@
     <div>
         <button id="createButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">Add Album</button>
         <button id="addPhotoButton" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addModal">Add Photo</button>
-        <button id="deleteSelectedButton" class="btn btn-danger" onclick="deleteSelectedAlbums()">Delete Selected</button>
+        <button id="deleteSelected" class="btn btn-danger">
+            Delete Selected
+        </button>
     </div>
     <input type="text" id="searchInput" class="form-control search-bar" placeholder="Search album...">
 </div>
 
 <div class="container mt-4">
+    @*<button id="deleteSelected" class="btn btn-danger mb-3">Delete Selected</button>*@
     <div class="row row-cols-1 row-cols-md-5 g-4" id="albumContainer">
         @foreach (var album in Model)
         {
             <div class="col album-item" data-name="@album.AlbumName">
                 <div class="card album-card">
-                    <img src="https://www.shutterstock.com/image-vector/no-image-available-icon-template-260nw-1340428865.jpg" class="album-img" alt="@album.AlbumName">
+                    <a href="@Url.Action("Index", "Photo", new { albumID = album.AlbumID })">
+                        <img src="https://www.shutterstock.com/image-vector/no-image-available-icon-template-260nw-1340428865.jpg"
+                             class="album-img"
+                             alt="@album.AlbumName">
+                    </a>
                     <div class="card-body">
                         <h5 class="card-title">@album.AlbumName</h5>
                         <p class="card-text text-muted">@album.ModifiedDate.ToString("dd MMM yyyy")</p>
@@ -69,8 +76,10 @@
                             <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal" onclick="loadEditAlbum('@album.AlbumID')">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button class="btn btn-outline-danger" onclick="deleteAlbum('@album.AlbumID')"><i class="fas fa-trash"></i></button>
-                            <input type="checkbox" class="form-check-input delete-checkbox" data-id="@album.AlbumID">
+                            <button class="btn btn-sm btn-danger deleteButton" data-id="@album.AlbumID">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                            <input type="checkbox" class="delete-checkbox" value="@album.AlbumID"> <!-- Perbaikan disini -->
                         </div>
                     </div>
                 </div>
@@ -78,6 +87,8 @@
         }
     </div>
 </div>
+
+
 
 <div class="d-flex justify-content-between align-items-center mt-4">
     <div>
@@ -155,7 +166,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addPhotoForm" enctype="multipart/form-data" method="post" action="@Url.Action("UpsertPhoto", "PhotoAlbum")">
+                <form id="addPhotoForm" enctype="multipart/form-data" method="post" novalidate>
                     <div class="mb-3">
                         <label for="albumSelect" class="form-label">Select Album</label>
                         <select class="form-select" id="albumSelect" name="AlbumID" required>
@@ -183,6 +194,7 @@
         </div>
     </div>
 </div>
+
 
 
 
@@ -324,23 +336,95 @@
             showAlbums();
         });
 
-        function deleteAlbum(albumID) {
-            // Add your deletion logic here
-            console.log('Delete album with ID:', albumID);
-        }
+        // Delete single album
+        $(document).on('click', '.deleteButton', function () {
+            const itemId = $(this).data('id');
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this item!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/PhotoAlbum/Delete',
+                        type: 'POST',
+                        data: { id: itemId },
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire("Deleted!", response.message, "success").then(() => {
+                                    location.reload(); // Reload halaman setelah sukses
+                                });
+                            } else {
+                                Swal.fire("Error!", response.message, "error");
+                            }
+                        },
+                        error: function () {
+                            Swal.fire("Error!", "Unable to delete the item. Please try again.", "error");
+                        }
+                    });
+                }
+            });
+        });
 
-        function editAlbum(albumID) {
-            // Add your edit logic here
-            console.log('Edit album with ID:', albumID);
-        }
+        // Delete multiple albums
+        $('#deleteSelected').on('click', function () {
+            var selectedIds = [];
+            $('.delete-checkbox:checked').each(function () {
+                selectedIds.push($(this).val()); // Pastikan value checkbox adalah AlbumID
+            });
 
-        function deleteSelectedAlbums() {
-            let selectedAlbums = $(".delete-checkbox:checked").map(function () {
-                return $(this).data("id");
-            }).get();
-            // Add your logic to delete selected albums here
-            console.log('Delete selected albums with IDs:', selectedAlbums);
-        }
+            if (selectedIds.length > 0) {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover these items!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete them!",
+                    cancelButtonText: "No, keep them"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/PhotoAlbum/DeleteSelected', // Endpoint sudah benar
+                            type: 'POST',
+                            data: { ids: selectedIds },
+                            traditional: true, // Agar array dikirim dengan benar
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire("Deleted!", response.message, "success").then(() => {
+                                        location.reload(); // Reload halaman setelah sukses
+                                    });
+                                } else {
+                                    Swal.fire("Error!", response.message, "error");
+                                }
+                            },
+                            error: function () {
+                                Swal.fire("Error!", "Unable to delete the items. Please try again.", "error");
+                            }
+                        });
+                    }
+                });
+            } else {
+                Swal.fire("No items selected", "Please select items to delete.", "info");
+            }
+        });
+
+        $(document).ready(function () {
+            $('#file').on('change', function (event) {
+                var file = event.target.files[0]; // Get the selected file
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#photoPreview').attr('src', e.target.result).css('display', 'block'); // Set src and ensure visibility
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    $('#photoPreview').attr('src', '').css('display', 'none'); // Hide preview if no file selected
+                }
+            });
+        });
 
         function loadEditAlbum(albumID) {
             $.ajax({
@@ -366,28 +450,37 @@
 
         //Upsert Photo Script--------------------------------------
 
-        $(document).ready(function () {
+       $(document).ready(function () {
             $("#addPhotoForm").on("submit", function (event) {
                 event.preventDefault();
 
-                var formData = new FormData(this); // Use FormData to send the file
+                var formData = new FormData(this);
+                var albumID = $("#albumSelect").val();
+                var file = $("#photoFile")[0].files[0];
+
+                if (!albumID || !file) {
+                    Swal.fire({ icon: "warning", title: "Warning!", text: "Please select an album and upload a photo." });
+                    return;
+                }
 
                 $.ajax({
                     type: "POST",
-                    url: "@Url.Action("UpsertPhoto", "PhotoAlbum")", // Change to the correct controller
+                    url: "/Photo/Create", // Pastikan sesuai dengan controller
                     data: formData,
-                    contentType: false, // Required for file upload
-                    processData: false, // Required for file upload
+                    contentType: false,
+                    processData: false,
                     success: function (response) {
                         if (response.success) {
                             Swal.fire({
                                 icon: "success",
                                 title: "Success!",
-                                text: "Photo added successfully!",
+                                text: response.message,
                                 showConfirmButton: false,
                                 timer: 2000
                             }).then(() => {
-                                location.reload();
+                                $("#addPhotoForm")[0].reset(); // Reset form
+                                $("#addModal").modal("hide"); // Tutup modal
+                                location.reload(); // Refresh halaman
                             });
                         } else {
                             Swal.fire({ icon: "error", title: "Error!", text: response.message || "Failed to add photo." });
@@ -399,6 +492,7 @@
                 });
             });
         });
+
 
 
     </script>

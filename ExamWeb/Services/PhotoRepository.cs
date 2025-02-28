@@ -5,45 +5,58 @@ using System.Web;
 using ExamWeb.PhotoService;
 using ExamWeb.Models;
 using ExamWeb.Interfaces;
+using ExamWeb.PhotoAlbumService;
 
 namespace ExamWeb.Services
 {
     public class PhotoRepository : IPhotoRepository
     {
         private readonly PhotoServiceClient _photoServiceClient;
+        private readonly PhotoAlbumServiceClient _photoAlbumServiceClient;
 
         public PhotoRepository()
         {
             _photoServiceClient = new PhotoServiceClient();
+            _photoAlbumServiceClient = new PhotoAlbumServiceClient();
         }
 
-        public IEnumerable<PhotoDTO> GetPhotos()
+        public IEnumerable<PhotoModel> GetPhotos(int AlbumID)
         {
-            var data = _photoServiceClient.GetPhotos();
-            return data;
+            var album = _photoAlbumServiceClient.GetPhotoAlbumById(AlbumID);
+            if(album != null)
+            {
+                var photos = _photoServiceClient.GetPhotos(AlbumID);
+                var mapped = Mapping.Mapper.Map<IEnumerable<PhotoModel>>(photos);
+                return mapped;
+            }else
+            {
+                return Enumerable.Empty<PhotoModel>();
+            }
         }
 
-        public PhotoDTO GetPhotoByID(int id)
+        public PhotoModel GetPhotoByID(int AlbumID, int id)
         {
-            var data = _photoServiceClient.GetPhotoByID(id);
-            return data;
+            var album = _photoAlbumServiceClient.GetPhotoAlbumById(AlbumID);
+            if (album != null)
+            {
+                var photo = _photoServiceClient.GetPhotoByID(id, AlbumID);
+                var mapped = Mapping.Mapper.Map<PhotoModel>(photo);
+                return mapped;
+            }else
+            {
+                return null;
+            }
         }
 
-        public void InsertPhoto(PhotoModel photo)
+        public void InsertPhoto(PhotoModel photo, int AlbumID)
         {
-            var data = Mapping.Mapper.Map<PhotoDTO>(photo);
-            _photoServiceClient.InsertPhoto(data);
+            var result = Mapping.Mapper.Map<PhotoDTO>(photo);
+            _photoServiceClient.InsertPhoto(result, AlbumID);
         }
 
-        public void UpdatePhoto(PhotoModel photo)
+        public void DeletePhoto(int AlbumID, int id)
         {
-            var data = Mapping.Mapper.Map<PhotoDTO>(photo);
-            _photoServiceClient.UpdatePhoto(data);
-        }
-
-        public void DeletePhoto(int id)
-        {
-            _photoServiceClient.DeletePhoto(id);
+            _photoServiceClient.DeletePhoto(id, AlbumID);
         }
     }
 }

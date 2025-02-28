@@ -15,7 +15,7 @@ namespace ExamWeb.Controllers
         private IEventRepository _eventRepository;
         public int photoSizeLimit = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["AlumniPhotoSizeLimit"]); // 3MB
         public string fileTypes = System.Configuration.ConfigurationManager.AppSettings["FileTypes"]; // "jpeg, jpg, png"
-        public string eventImagesPath = System.Configuration.ConfigurationManager.AppSettings["EventPhotosPath"];
+        public string eventImagesPath = System.Configuration.ConfigurationManager.AppSettings["EventImagesPath"];
         public EventController()
         {
             _eventRepository = new EventRepository();
@@ -169,79 +169,6 @@ namespace ExamWeb.Controllers
             }
         }
 
-        //[HttpPost]
-        //public ActionResult UpsertEvent(HttpPostedFileBase file, EventModel eventModel)
-        //{
-        //    try
-        //    {
-        //        // Remove validation for image fields if they are not provided by the user
-        //        ModelState.Remove("EventImagePath");
-        //        ModelState.Remove("EventImageName");
-
-        //        if (ModelState.IsValid)
-        //        {
-        //            // If it's a new event, eventModel.EventID should be 0.
-        //            if (file == null || file.ContentLength == 0)
-        //            {
-        //                // For a new event, a photo is required
-        //                if (eventModel.EventID == 0)
-        //                {
-        //                    return Json(new { error = true, errorMsg = "A photo is required." });
-        //                }
-        //                else
-        //                {
-        //                    // For an update, keep the existing image
-        //                    var existingEvent = _eventRepository.GetEventByID(eventModel.EventID);
-        //                    if (existingEvent != null)
-        //                    {
-        //                        eventModel.EventImagePath = existingEvent.EventImagePath;
-        //                        eventModel.EventImageName = existingEvent.EventImageName;
-        //                    }
-        //                }
-        //            }
-        //            else
-        //            {
-        //                // Validate file type
-        //                var allowedExtensions = fileTypes.Split(',')
-        //                                                 .Select(e => e.Trim().ToLower())
-        //                                                 .ToList();
-
-        //                var extension = Path.GetExtension(file.FileName).ToLower();
-        //                if (!allowedExtensions.Contains(extension))
-        //                {
-        //                    return Json(new { error = true, errorMsg = $"Only {string.Join(", ", allowedExtensions)} files are allowed." });
-        //                }
-
-        //                // Validate file size
-        //                if (file.ContentLength > photoSizeLimit)
-        //                {
-        //                    return Json(new { error = true, errorMsg = $"File size must be less than {photoSizeLimit / 1024 / 1024} MB." });
-        //                }
-
-        //                // Generate unique file name and save new file
-        //                var fileName = Guid.NewGuid().ToString() + extension;
-        //                var filePath = Path.Combine(Server.MapPath(eventImagesPath), fileName);
-        //                file.SaveAs(filePath);
-
-        //                // Update eventModel with new image details
-        //                eventModel.EventImagePath = eventImagesPath;
-        //                eventModel.EventImageName = fileName;
-        //            }
-
-        //            eventModel.ModifiedDate = DateTime.Now;
-
-        //            _eventRepository.UpsertEvent(eventModel);
-        //            return Json(new { success = true });
-        //        }
-        //        return Json(new { error = true });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ModelState.AddModelError("", "Unable to save event: " + ex.Message);
-        //        return Json(new { error = true, errorMsg = ex.Message });
-        //    }
-        //}
-
         [HttpPost]
         public ActionResult UpsertEvent(HttpPostedFileBase file, EventModel eventModel)
         {
@@ -253,17 +180,17 @@ namespace ExamWeb.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    // Jika file tidak ada
+                    // If it's a new event, eventModel.EventID should be 0.
                     if (file == null || file.ContentLength == 0)
                     {
-                        // Jika event baru, wajib ada foto
+                        // For a new event, a photo is required
                         if (eventModel.EventID == 0)
                         {
                             return Json(new { error = true, errorMsg = "A photo is required." });
                         }
                         else
                         {
-                            // Untuk update, tetap gunakan gambar lama
+                            // For an update, keep the existing image
                             var existingEvent = _eventRepository.GetEventByID(eventModel.EventID);
                             if (existingEvent != null)
                             {
@@ -274,7 +201,7 @@ namespace ExamWeb.Controllers
                     }
                     else
                     {
-                        // Validasi ekstensi file
+                        // Validate file type
                         var allowedExtensions = fileTypes.Split(',')
                                                          .Select(e => e.Trim().ToLower())
                                                          .ToList();
@@ -285,45 +212,32 @@ namespace ExamWeb.Controllers
                             return Json(new { error = true, errorMsg = $"Only {string.Join(", ", allowedExtensions)} files are allowed." });
                         }
 
-                        // Validasi ukuran file
+                        // Validate file size
                         if (file.ContentLength > photoSizeLimit)
                         {
                             return Json(new { error = true, errorMsg = $"File size must be less than {photoSizeLimit / 1024 / 1024} MB." });
                         }
 
-                        // Generate unique file name
+                        // Generate unique file name and save new file
                         var fileName = Guid.NewGuid().ToString() + extension;
-                        var serverPath = Server.MapPath(eventImagesPath);
-
-                        // Buat folder jika belum ada
-                        if (!Directory.Exists(serverPath))
-                        {
-                            Directory.CreateDirectory(serverPath);
-                        }
-
-                        // Simpan file
-                        var filePath = Path.Combine(serverPath, fileName);
+                        var filePath = Path.Combine(Server.MapPath(eventImagesPath), fileName);
                         file.SaveAs(filePath);
 
-                        // Update eventModel dengan informasi gambar
-                        eventModel.EventImagePath = eventImagesPath + fileName;
+                        // Update eventModel with new image details
+                        eventModel.EventImagePath = eventImagesPath;
                         eventModel.EventImageName = fileName;
                     }
 
-                    // Set tanggal update terakhir
                     eventModel.ModifiedDate = DateTime.Now;
 
-                    // Simpan ke database
                     _eventRepository.UpsertEvent(eventModel);
-                    return Json(new { success = true });
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
                 }
-
-                return Json(new { error = true, errorMsg = "Invalid data." });
+                return Json(new { error = true });
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Unable to save event: " + ex.Message);
-                return Json(new { error = true, errorMsg = ex.Message });
+                return Json(new { error = true, errorMsg = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
 

@@ -1,0 +1,162 @@
+﻿@model IEnumerable<ExamWeb.Models.PhotoModel>
+
+@{
+    ViewBag.Title = "Photo Gallery";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        .photo-card {
+            transition: transform 0.2s ease-in-out;
+        }
+
+            .photo-card:hover {
+                transform: scale(1.05);
+            }
+
+        .photo-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-bar {
+            width: 250px;
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .entries-select {
+            width: 100px;
+        }
+    </style>
+}
+
+<h2>Photo Gallery</h2>
+
+<div class="toolbar mb-3">
+    <div>
+        <button class="btn btn-secondary" onclick="history.back()"><i class="fas fa-arrow-left"></i> Back</button>
+        <button id="addPhotoButton" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addModal">Add Photo</button>
+    </div>
+    <input type="text" id="searchInput" class="form-control search-bar" placeholder="Search photo...">
+</div>
+
+<div class="container mt-4">
+    <div class="row row-cols-1 row-cols-md-5 g-4" id="photoContainer">
+        @foreach (var photo in Model)
+        {
+            <div class="col photo-item" data-name="@photo.PhotoFileName">
+                <div class="card photo-card">
+                    <img src="@Url.Content(photo.PhotoPath + "/" + photo.PhotoFileName)" class="photo-img" alt="@photo.PhotoFileName">
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="pagination-container">
+    <div>
+        <label>
+            Show
+            <select id="entriesSelect" class="form-select entries-select">
+                <option value="5">5</option>
+                <option value="10" selected>10</option>
+                <option value="20">20</option>
+            </select> entries
+        </label>
+    </div>
+    <ul class="pagination"></ul>
+</div>
+
+<script>
+    $(document).ready(function () {
+        let photosPerPage = parseInt($("#entriesSelect").val());
+        let photos = $(".photo-item");
+        let totalPhotos = photos.length;
+        let totalPages = Math.ceil(totalPhotos / photosPerPage);
+        let currentPage = 1;
+
+        function showPhotos() {
+            photos.hide();
+            let start = (currentPage - 1) * photosPerPage;
+            let end = start + photosPerPage;
+            photos.slice(start, end).show();
+            renderPagination();
+        }
+
+        function renderPagination() {
+            $(".pagination").empty();
+            totalPages = Math.ceil(photos.length / photosPerPage);
+
+            let prevDisabled = currentPage === 1 ? 'disabled' : '';
+            let nextDisabled = currentPage === totalPages ? 'disabled' : '';
+
+            $(".pagination").append(
+                `<li class="page-item ${prevDisabled}">
+                    <a class="page-link" href="#" data-page="${currentPage - 1}">« Previous</a>
+                </li>`
+            );
+
+            for (let i = 1; i <= totalPages; i++) {
+                $(".pagination").append(
+                    `<li class="page-item ${i === currentPage ? 'active' : ''}">
+                        <a class="page-link" href="#" data-page="${i}">${i}</a>
+                    </li>`
+                );
+            }
+
+            $(".pagination").append(
+                `<li class="page-item ${nextDisabled}">
+                    <a class="page-link" href="#" data-page="${currentPage + 1}">Next »</a>
+                </li>`
+            );
+        }
+
+        $(document).on("click", ".page-link", function (e) {
+            e.preventDefault();
+            let newPage = parseInt($(this).data("page"));
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentPage = newPage;
+                showPhotos();
+            }
+        });
+
+        $("#searchInput").on("keyup", function () {
+            let query = $(this).val().toLowerCase();
+            photos.hide();
+            photos.filter(function () {
+                return $(this).data("name").toLowerCase().includes(query);
+            }).show();
+            currentPage = 1;
+            totalPages = Math.ceil($(".photo-item:visible").length / photosPerPage);
+            showPhotos();
+        });
+
+        $("#entriesSelect").on("change", function () {
+            photosPerPage = parseInt($(this).val());
+            currentPage = 1;
+            totalPages = Math.ceil(photos.length / photosPerPage);
+            showPhotos();
+        });
+
+        showPhotos();
+    });
+</script>

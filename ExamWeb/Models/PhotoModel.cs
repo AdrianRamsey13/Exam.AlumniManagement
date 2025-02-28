@@ -17,6 +17,8 @@ namespace ExamWeb.Models
         [Display(Name = "Album ID")]
         public int AlbumID { get; set; }
 
+        public string AlbumnName { get; set; }
+
 
         [Display(Name = "Photo Path")]
         public string PhotoPath { get; set; }

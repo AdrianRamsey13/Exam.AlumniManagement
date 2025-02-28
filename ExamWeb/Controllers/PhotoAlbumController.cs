@@ -111,41 +111,51 @@ namespace ExamWeb.Controllers
             }
         }
 
-        // GET: PhotoAlbum/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: PhotoAlbum/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
         // POST: PhotoAlbum/Delete/5
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
             try
             {
-                // TODO: Add delete logic here
+                var existingData = _photoAlbumRepository.GetPhotoAlbumById(id);
+                if (existingData == null)
+                {
+                    return HttpNotFound();
+                }
 
-                return RedirectToAction("Index");
+                _photoAlbumRepository.DeletePhotoAlbum(id);
+                return Json(new { success = true, message = "Album deleted successfully" });
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return Json(new { success = false, message = "Error deleting album: " + ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DeleteSelected(int[] ids)
+        {
+            try
+            {
+                if (ids != null && ids.Length > 0)
+                {
+                    int count = 0;
+                    foreach (var itemID in ids)
+                    {
+                        var existingData = _photoAlbumRepository.GetPhotoAlbumById(itemID);
+                        if (existingData != null)
+                        {
+                            _photoAlbumRepository.DeletePhotoAlbum(itemID);
+                            count += 1;
+                        }
+                    }
+                    return Json(new { success = true, message = count + " items have been deleted successfully" });
+                }
+                return Json(new { success = false, message = "No items selected for deletion" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error deleting items: " + ex.Message });
             }
         }
     }

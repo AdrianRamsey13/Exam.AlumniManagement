@@ -10,20 +10,16 @@ using ExamWeb.Models;
 namespace ExamWeb.Interfaces
 {
     public interface IPhotoRepository
-    {
-        
-        IEnumerable<PhotoDTO> GetPhotos();
+    {        
+        IEnumerable<PhotoModel> GetPhotos(int AlbumID);
 
         
-        PhotoDTO GetPhotoByID(int id);
+        PhotoModel GetPhotoByID(int AlbumID, int id);
 
         
-        void InsertPhoto(PhotoModel photo);
+        void InsertPhoto(PhotoModel photo, int AlbumID);
 
         
-        void UpdatePhoto(PhotoModel photo);
-
-        
-        void DeletePhoto(int id);
+        void DeletePhoto(int AlbumID, int id);
     }
 }

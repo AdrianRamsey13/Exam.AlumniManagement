@@ -560,16 +560,17 @@
     <Content Include="Views\Event\Index.cshtml" />
     <Content Include="Views\Event\Create.cshtml" />
     <Content Include="Views\PhotoAlbum\Index.cshtml" />
+    <Content Include="Views\Photo\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\AlumniImages\" />
     <Folder Include="App_Data\AlumniPhotos\" />
     <Folder Include="App_Data\EventPhotos\" />
     <Folder Include="App_Data\JobAttachments\" />
+    <Folder Include="App_Data\PhotoGallery\" />
     <Folder Include="App_Data\Template\" />
     <Folder Include="Views\Gallery\" />
     <Folder Include="Views\JobApplication\" />
-    <Folder Include="Views\Photo\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

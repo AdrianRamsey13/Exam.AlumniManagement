@@ -283,7 +283,7 @@
                         <div class="form-group mt-2">
                             <label for="editFile">Image</label>
                             <div class="col-md-10">
-                                <input type="file" id="editFile" name="editFile" class="form-control" accept=".jpg, .jpeg, .png">
+                                <input type="file" id="editFile" name="file" class="form-control" accept=".jpg, .jpeg, .png">
                                 <small class="text-muted">Allowed formats: .jpg, .jpeg, .png</small>
                             </div>
                         </div>
@@ -356,10 +356,10 @@
                     {
                         "data": null,
                         "render": function (data, type, row) {
-                            var imagePath = row.EventImagePath ? row.EventImagePath.replace("~", "") + '/' + row.EventImageName : '~/Images/placeholder.png';
-                            return '<img src="' + imagePath + '" alt="Event Image" class="img-thumbnail img-preview" ' +
-                                'onclick="showImagePreview(\'' + imagePath + '\')" ' +
-                                'style="width: 50px; height: 50px; object-fit: cover;" />';
+                            var basePath = '@Url.Content("~/App_Data/EventPhotos")';
+                            var imagePath = basePath + '/' + row.EventImageName;
+                            return '<img src="' + imagePath + '" alt="Alumni Photo" class="img-thumbnail img-preview" ' +
+                                'data-image-src="' + imagePath + '" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">';
                         }
                     },
                     { "data": "Title" },
@@ -421,7 +421,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: '/Events/Delete',
+                            url: '/Event/Delete',
                             type: 'POST',
                             data: { id: itemId },
                             success: function (response) {
@@ -595,7 +595,7 @@
 
                         // *Populate Image Preview using AJAX response*
                         if (response.EventImageName) {
-                            var basePath = '@Url.Content("~/App_Data/EventImages/")';
+                            var basePath = '@Url.Content("~/App_Data/EventPhotos/")';
                             var imagePath = basePath + '/' + response.EventImageName;
                             $('#editPhotoPreview').attr('src', imagePath).show();
                         } else {
@@ -624,10 +624,13 @@
                     processData: false, // Prevent jQuery from processing data
                     contentType: false, // Ensure correct content type for file upload
                     success: function (response) {
-                        if (response.success) {
-                            $('#editModal').modal('hide'); // Close the modal
-                            $('#editForm')[0].reset(); // Reset the form
+                        console.log(response); // Debugging to check if it's returning JSON
+
+                        if (response.success) { // Ensure it's checking success correctly
+                            $('#editModal').modal('hide'); // Close modal
+                            $('#editForm')[0].reset(); // Reset form
                             $('#eventsData').DataTable().ajax.reload(); // Reload DataTable
+
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Success',
@@ -640,14 +643,19 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: response.errorMsg,
+                                text: response.errorMsg || "An unknown error occurred.",
                                 showConfirmButton: true
                             });
                         }
                     },
                     error: function (xhr) {
-                        console.error(xhr.responseText);
-                        alert('An error occurred while saving.');
+                        console.error("AJAX Error:", xhr.responseText); // Log for debugging
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: "An error occurred while saving.",
+                            showConfirmButton: true
+                        });
                     }
                 });
             });
