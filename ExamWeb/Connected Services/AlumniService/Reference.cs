@@ -74,6 +74,9 @@ namespace ExamWeb.AlumniService {
         private string FullNamesField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string GenderField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> GraduationYearField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -348,6 +351,19 @@ namespace ExamWeb.AlumniService {
                 if ((object.ReferenceEquals(this.FullNamesField, value) != true)) {
                     this.FullNamesField = value;
                     this.RaisePropertyChanged("FullNames");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Gender {
+            get {
+                return this.GenderField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.GenderField, value) != true)) {
+                    this.GenderField = value;
+                    this.RaisePropertyChanged("Gender");
                 }
             }
         }

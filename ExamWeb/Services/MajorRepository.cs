@@ -35,6 +35,11 @@ namespace ExamWeb.Services
             var data = _majorServiceClient.GetMajorsByFacultyID(facultyID);
             return data;
         }
+        public int GetFacultyIDByName(string facultyName)
+        {
+            var data = _majorServiceClient.GetFacultyIDByName(facultyName);
+            return data;
+        }
 
         public void InsertMajor(MajorModel major)
         {

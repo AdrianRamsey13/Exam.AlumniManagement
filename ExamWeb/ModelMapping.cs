@@ -10,6 +10,9 @@ using ExamWeb.JobAttachmentService;
 using ExamWeb.JobHistoryService;
 using ExamWeb.JobPostingService;
 using ExamWeb.MajorService;
+using ExamWeb.EventService;
+using ExamWeb.PhotoAlbumService;
+using ExamWeb.PhotoService;
 using ExamWeb.Models;
 
 namespace ExamWeb
@@ -41,6 +44,9 @@ namespace ExamWeb
             CreateMap<JobPostingDTO, JobPostingModel>().ReverseMap();
             CreateMap<JobPostingService.JobAttachmentDTO, JobAttachmentModel>().ReverseMap();
             CreateMap<JobCandidateDTO, JobCandidateModel>().ReverseMap();
+            CreateMap<EventDTO, EventModel>().ReverseMap();
+            CreateMap<PhotoDTO, PhotoModel>().ReverseMap();
+            CreateMap<PhotoAlbumDTO, PhotoAlbumModel>().ReverseMap();
         }
     }
 }

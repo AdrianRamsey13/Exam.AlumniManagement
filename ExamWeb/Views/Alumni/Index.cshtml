@@ -12,7 +12,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
 
-        . /* Pastikan tabel menggunakan fixed layout */
+        /* Pastikan tabel menggunakan fixed layout */
         #alumnisData {
             table-layout: fixed !important;
             width: 100% !important;
@@ -98,6 +98,21 @@
     </div>
 </div>
 
+<div class="row mb-3">
+    <div class="col-md-4">
+        <label for="facultyFilter">Filter by Faculty:</label>
+        <select id="facultyFilter" class="form-select">
+            <option value="">All Faculties</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label for="majorFilter">Filter by Major:</label>
+        <select id="majorFilter" class="form-select">
+            <option value="">All Majors</option>
+        </select>
+    </div>
+</div>
+
 <div style="overflow-x: auto; max-width: 100%;">
     <table class="table" id="alumnisData" style="width:100%">
         <thead>
@@ -107,6 +122,7 @@
                 <th style="width: 4%;">No.</th>
                 <th style="width: 7%;">Photo</th>
                 <th style="width: 12%;">@Html.DisplayNameFor(model => model.FullNames)</th>
+                <th>Gender</th>
                 <th style="width: 15%;">@Html.DisplayNameFor(model => model.Email)</th>
                 <th style="width: 10%;">@Html.DisplayNameFor(model => model.MobileNumber)</th>
                 <th style="width: 15%;">Alamat</th>
@@ -180,6 +196,17 @@
                                     <div class="col-md-10">
                                         @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
                                         @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group mt-2">
+                                    @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.DropDownListFor(model => model.Gender, new List<SelectListItem>
+                                        {
+                                            new SelectListItem { Text = "Male", Value = "Male" },
+                                            new SelectListItem { Text = "Female", Value = "Female" }
+                                        }, "Select Gender", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="form-group mt-2">
@@ -345,6 +372,18 @@
                                     </div>
                                 </div>
                                 <div class="form-group mt-2">
+                                    @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.DropDownListFor(model => model.Gender, new SelectList(
+                                            new List<SelectListItem>
+                                            {
+                                                new SelectListItem { Text = "Male", Value = "Male" },
+                                                new SelectListItem { Text = "Female", Value = "Female" },                                                
+                                            }, "Value", "Text", ViewBag.SelectedGender), "Select Gender", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group mt-2">
                                     Mobile Number
                                     <div class="col-md-10">
                                         @Html.EditorFor(model => model.MobileNumber, new { htmlAttributes = new { @class = "form-control" } })
@@ -464,6 +503,10 @@
                 "ajax": {
                     "url": "@Url.Action("GetAlumnis", "Alumni")",
                     "type": "GET",
+                    data: function (d) {
+                        d.faculty = $('#facultyFilter').val(); // Kirim filter faculty
+                        d.major = $('#majorFilter').val(); // Kirim filter major
+                    },
                     "datatype": "json"
                 },
                 "columns": [
@@ -505,6 +548,7 @@
                         }
                     },
                     { "data": "FullNames" },
+                    {"data": "Gender"},
                     { "data": "Email" },
                     { "data": "MobileNumber" },
                     {
@@ -547,10 +591,48 @@
                         "last": ">>"
                     }
                 },
+                //"rowCallback": function (row, data, index) {
+                //    if (data.Gender && data.Gender.trim().toLowerCase() === "female") {
+                //        $(row).css("background-color", "#f8d7da"); // Warna merah muda untuk Female
+                //    } else if (data.Gender && data.Gender.trim().toLowerCase() === "male") {
+                //        $(row).css("background-color", "#d4edda"); // Warna hijau muda untuk Male
+                //    }
+                //},
                 "fixedColumns": {
                     "leftColumns" : 5
                 }
             });
+            //----------------------------------------------Filter Faculty and Major-------------------------------------------
+
+            // Event listener untuk filter faculty
+            $('#facultyFilter').on('change', function () {
+                var selectedFaculty = $(this).val();
+
+                // Reset dropdown major saat faculty berubah
+                $('#majorFilter').empty().append('<option value="">-- Select Major --</option>');
+
+                // Ambil daftar major berdasarkan faculty yang dipilih
+                if (selectedFaculty) {
+                    $.ajax({
+                        url: '@Url.Action("GetMajorsByFaculty", "Alumni")',
+                        type: 'GET',
+                        data: { faculty: selectedFaculty },
+                        success: function (data) {
+                            $.each(data, function (index, major) {
+                                $('#majorFilter').append('<option value="' + major + '">' + major + '</option>');
+                            });
+                        }
+                    });
+                }
+
+                table.ajax.reload(); // Reload DataTables setelah filter faculty berubah
+            });
+
+            // Event listener untuk filter major
+            $('#majorFilter').on('change', function () {
+                table.ajax.reload(); // Reload DataTables setelah filter major berubah
+            });
+
             $('#alumnisData_filter input').unbind();
             $('#alumnisData_filter input').on('keyup', function (e) {
                 var value = $(this).val();
@@ -736,6 +818,7 @@
                         $('#editModal #FirstName').val(response.FirstName);
                         $('#editModal #MiddleName').val(response.MiddleName);
                         $('#editModal #LastName').val(response.LastName);
+                        $('#editModal #Gender').val(response.Gender);
                         $('#editModal #Email').val(response.Email);
                         $('#editModal #MobileNumber').val(response.MobileNumber);
                         $('#editModal #Address').val(response.Address);
@@ -1037,5 +1120,34 @@
         }
 
 
+    </script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '@Url.Action("GetFacultyMajorData", "Alumni")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.faculties && response.majors) {
+                        // Mengisi dropdown fakultas
+                        var facultyDropdown = $('#facultyFilter');
+                        facultyDropdown.append('<option value="">-- Pilih Fakultas --</option>');
+                        $.each(response.faculties, function (index, item) {
+                            facultyDropdown.append('<option value="' + item.Value + '">' + item.Text + '</option>');
+                        });
+
+                        // Mengisi dropdown jurusan
+                        var majorDropdown = $('#majorFilter');
+                        majorDropdown.append('<option value="">-- Pilih Jurusan --</option>');
+                        $.each(response.majors, function (index, item) {
+                            majorDropdown.append('<option value="' + item.Value + '">' + item.Text + '</option>');
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error fetching faculty and major data:", error);
+                }
+            });
+        });
     </script>
 }

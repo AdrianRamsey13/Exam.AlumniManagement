@@ -12,6 +12,7 @@ namespace ExamWeb.Interfaces
     {
         IEnumerable<MajorDTO> GetMajors();
         IEnumerable<MajorDTO> GetMajorsByFacultyID(int facultyID);
+        int GetFacultyIDByName(string facultyName);
         MajorDTO GetMajorByID(int majorID);
         void InsertMajor(MajorModel major);
         void UpdateMajor(MajorModel major);

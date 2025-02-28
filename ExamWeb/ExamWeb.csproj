@@ -139,6 +139,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Connected Services\EventService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Connected Services\FacultyService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -164,31 +169,49 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Connected Services\PhotoAlbumService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\PhotoService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\AlumniController.cs" />
     <Compile Include="Controllers\AlumniImageController.cs" />
     <Compile Include="Controllers\CandidateController.cs" />
+    <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\FacultyController.cs" />
+    <Compile Include="Controllers\GalleryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JobApplicationController.cs" />
     <Compile Include="Controllers\JobCandidateDTO.cs" />
     <Compile Include="Controllers\JobHistoryController.cs" />
     <Compile Include="Controllers\JobPostingController.cs" />
     <Compile Include="Controllers\MajorController.cs" />
+    <Compile Include="Controllers\PhotoAlbumController.cs" />
+    <Compile Include="Controllers\PhotoController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\IAlumniImageRepository.cs" />
     <Compile Include="Interfaces\IAlumniRepository.cs" />
     <Compile Include="Interfaces\ICandidateRepository.cs" />
+    <Compile Include="Interfaces\IEventRepository.cs" />
     <Compile Include="Interfaces\IExcelService.cs" />
     <Compile Include="Interfaces\IFacultyRepository.cs" />
     <Compile Include="Interfaces\IJobHistoryRepository.cs" />
     <Compile Include="Interfaces\IJobPostingRepository.cs" />
     <Compile Include="Interfaces\IMajorRepository.cs" />
+    <Compile Include="Interfaces\IPhotoAlbumRepository.cs" />
+    <Compile Include="Interfaces\IPhotoRepository.cs" />
     <Compile Include="ModelMapping.cs" />
     <Compile Include="Models\AlumniImageModel.cs" />
     <Compile Include="Models\AlumniModel.cs" />
     <Compile Include="Models\DistrictModel.cs" />
+    <Compile Include="Models\EventModel.cs" />
     <Compile Include="Models\FacultyModel.cs" />
     <Compile Include="Models\HobbyModel.cs" />
     <Compile Include="Models\JobAttachmentModel.cs" />
@@ -196,16 +219,21 @@
     <Compile Include="Models\JobHistoryModel.cs" />
     <Compile Include="Models\JobPostingModel.cs" />
     <Compile Include="Models\MajorModel.cs" />
+    <Compile Include="Models\PhotoAlbumModel.cs" />
+    <Compile Include="Models\PhotoModel.cs" />
     <Compile Include="Models\StateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AlumniImageRepository.cs" />
     <Compile Include="Services\AlumniRepository.cs" />
     <Compile Include="Services\CandidateRepository.cs" />
+    <Compile Include="Services\EventRepository.cs" />
     <Compile Include="Services\ExcelService.cs" />
     <Compile Include="Services\FacultyRepository.cs" />
     <Compile Include="Services\JobHistoryRepository.cs" />
     <Compile Include="Services\JobPostingRepository.cs" />
     <Compile Include="Services\MajorRepository.cs" />
+    <Compile Include="Services\PhotoAlbumRepository.cs" />
+    <Compile Include="Services\PhotoRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\AlumniImageService\AlumniImageService.wsdl" />
@@ -256,6 +284,16 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <None Include="Connected Services\EventService\EventService.disco" />
+    <None Include="Connected Services\EventService\configuration91.svcinfo" />
+    <None Include="Connected Services\EventService\configuration.svcinfo" />
+    <Content Include="Connected Services\EventService\ExamWeb.EventService.EventDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\EventService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Connected Services\FacultyService\ExamWeb.FacultyService.FacultyDTO.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
@@ -270,6 +308,16 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\AlumniService\AlumniService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\EventService\EventService.wsdl" />
+    <None Include="Connected Services\EventService\EventService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\EventService\EventService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\EventService\EventService2.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\FacultyService\FacultyService.disco" />
@@ -383,6 +431,26 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <Content Include="Connected Services\PhotoAlbumService\ExamWeb.PhotoAlbumService.PhotoAlbumDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\PhotoAlbumService\PhotoAlbumService.disco" />
+    <None Include="Connected Services\PhotoAlbumService\configuration91.svcinfo" />
+    <None Include="Connected Services\PhotoAlbumService\configuration.svcinfo" />
+    <None Include="Connected Services\PhotoAlbumService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <Content Include="Connected Services\PhotoService\ExamWeb.PhotoService.PhotoDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\PhotoService\PhotoService.disco" />
+    <None Include="Connected Services\PhotoService\configuration91.svcinfo" />
+    <None Include="Connected Services\PhotoService\configuration.svcinfo" />
+    <None Include="Connected Services\PhotoService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -420,6 +488,26 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\MajorService\MajorService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\PhotoAlbumService\PhotoAlbumService.wsdl" />
+    <None Include="Connected Services\PhotoAlbumService\PhotoAlbumService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\PhotoAlbumService\PhotoAlbumService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\PhotoAlbumService\PhotoAlbumService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\PhotoService\PhotoService.wsdl" />
+    <None Include="Connected Services\PhotoService\PhotoService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\PhotoService\PhotoService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\PhotoService\PhotoService2.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
@@ -469,12 +557,19 @@
     <Content Include="Views\JobPosting\Edit.cshtml" />
     <Content Include="Views\Candidate\Index.cshtml" />
     <Content Include="Views\JobPosting\CreateApplyJob.cshtml" />
+    <Content Include="Views\Event\Index.cshtml" />
+    <Content Include="Views\Event\Create.cshtml" />
+    <Content Include="Views\PhotoAlbum\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\AlumniImages\" />
     <Folder Include="App_Data\AlumniPhotos\" />
+    <Folder Include="App_Data\EventPhotos\" />
     <Folder Include="App_Data\JobAttachments\" />
+    <Folder Include="App_Data\Template\" />
+    <Folder Include="Views\Gallery\" />
     <Folder Include="Views\JobApplication\" />
+    <Folder Include="Views\Photo\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
@@ -509,11 +604,14 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\AlumniImageService\" />
     <WCFMetadataStorage Include="Connected Services\AlumniService\" />
+    <WCFMetadataStorage Include="Connected Services\EventService\" />
     <WCFMetadataStorage Include="Connected Services\FacultyService\" />
     <WCFMetadataStorage Include="Connected Services\JobAttachmentService\" />
     <WCFMetadataStorage Include="Connected Services\JobHistoryService\" />
     <WCFMetadataStorage Include="Connected Services\JobPostingService\" />
     <WCFMetadataStorage Include="Connected Services\MajorService\" />
+    <WCFMetadataStorage Include="Connected Services\PhotoAlbumService\" />
+    <WCFMetadataStorage Include="Connected Services\PhotoService\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

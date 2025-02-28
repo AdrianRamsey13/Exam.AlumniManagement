@@ -27,6 +27,7 @@
       <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="FullAddresses" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="FullNames" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Gender" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="GraduationYear" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="HobbyDisplay" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />

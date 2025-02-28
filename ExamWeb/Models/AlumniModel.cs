@@ -23,6 +23,11 @@ namespace ExamWeb.Models
         [StringLength(50, ErrorMessage = "Last name must be between 1 - 50 characters")]
         [DisplayName("Last Name")]
         public string LastName { get; set; }
+
+        [DisplayName("Gender")]
+        [Required(ErrorMessage = "Gender is required")]
+        public string Gender { get; set; }
+
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Email addresss is invalid")]
         [DisplayName("Email")]

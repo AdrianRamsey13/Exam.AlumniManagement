@@ -30,13 +30,27 @@ namespace ExamWeb.Controllers
             _excelService = new ExcelService();
         }
         // GET: Alumni
-        public JsonResult GetAlumnis()
+        public JsonResult GetAlumnis(string faculty = null, string major = null)
         {
             var alumnisData = _alumniRepository.GetAlumnis();
+
+            // Filter berdasarkan faculty jika parameter tidak null atau kosong
+            if (!string.IsNullOrEmpty(faculty))
+            {
+                alumnisData = alumnisData.Where(a => a.FacultyNames == faculty).ToList();
+            }
+
+            // Filter berdasarkan major jika parameter tidak null atau kosong
+            if (!string.IsNullOrEmpty(major))
+            {
+                alumnisData = alumnisData.Where(a => a.MajorNames == major).ToList();
+            }
+
             var json = Json(new { data = alumnisData }, JsonRequestBehavior.AllowGet);
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
+
 
         public JsonResult GetMajorByFacultyID(int facultyID)
         {
@@ -195,7 +209,7 @@ namespace ExamWeb.Controllers
                         alumni.PhotoPath = alumniPhotosPath;
 
                     }
-                        _alumniRepository.UpsertAlumni(alumni);
+                    _alumniRepository.UpsertAlumni(alumni);
                     //TempData["SuccessMessage"] = "Alumni added successfully";
                 }
 
@@ -271,10 +285,10 @@ namespace ExamWeb.Controllers
                 ViewBag.SelectedMajor = alumni.MajorID;
                 ViewBag.SelectedDistrict = alumni.DistrictID;
                 ModelState.AddModelError("", "Unable to save alumni " + ex.Message);
-                return Json(new 
-                { 
-                    error = true, 
-                    errorMsg = "Error adding alumni " + ex.Message 
+                return Json(new
+                {
+                    error = true,
+                    errorMsg = "Error adding alumni " + ex.Message
                 });
             }
         }
@@ -336,9 +350,12 @@ namespace ExamWeb.Controllers
             // Pass selected degree to ViewBag
             ViewBag.SelectedDegree = item.Degree;
 
+            //Pass selected gender to ViewBag
+            ViewBag.SelectedGender = item.Gender;
+
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        
+
         // POST: Alumni/Edit/5
         [HttpPost]
         public ActionResult Edit(AlumniModel alumni, HttpPostedFileBase file)
@@ -528,6 +545,41 @@ namespace ExamWeb.Controllers
                 ModelState.AddModelError("", "Unable to import data: " + ex.Message);
                 return RedirectToAction("Index");
             }
+        }
+
+        //Get All Faculty and Major Data
+        public JsonResult GetFacultyMajorData()
+        {
+            var faculties = _facultyRepository.GetFaculties()
+                .Select(f => new SelectListItem
+                {
+                    Value = f.FacultyID.ToString(),
+                    Text = f.FacultyName
+                })
+                .ToList();
+            var majors = _majorRepository.GetMajors()
+                .Select(m => new SelectListItem
+                {
+                    Value = m.MajorID.ToString(),
+                    Text = m.MajorName
+                })
+                .ToList();
+
+            return Json(new { faculties, majors }, JsonRequestBehavior.AllowGet);
+        }
+
+        //Get Major Based on Faculty
+        public JsonResult GetMajorsByFaculty(int faculty)
+        {
+            //var facultyID = _majorRepository.GetFacultyIDByName(faculty);
+            var majors = _majorRepository.GetMajorsByFacultyID(faculty)
+                .Select(m => new SelectListItem
+                {
+                    Value = m.MajorID.ToString(),
+                    Text = m.MajorName
+                })
+                .ToList();
+            return Json(majors, JsonRequestBehavior.AllowGet);
         }
     }
 }
