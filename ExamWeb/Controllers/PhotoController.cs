@@ -11,6 +11,7 @@ using Microsoft.Ajax.Utilities;
 
 namespace ExamWeb.Controllers
 {
+    [Authorize]
     public class PhotoController : Controller
     {
         private readonly IPhotoRepository _photoRepository;
@@ -26,8 +27,10 @@ namespace ExamWeb.Controllers
         }
 
         // GET: Photo
+        [Authorize(Roles = "Superadmin")]
         public ActionResult Index(int albumID)
         {
+            ViewBag.AlbumId = albumID;
             var album = _photoAlbumRepository.GetPhotoAlbumById(albumID);
             ViewBag.AlbumName = album.AlbumName;
             var photos = _photoRepository.GetPhotos(albumID);
@@ -40,16 +43,13 @@ namespace ExamWeb.Controllers
             return Json(photos, JsonRequestBehavior.AllowGet);
         }
 
-        // GET: Photo/Details/5
-        public ActionResult Details(int id)
+        //Post set thumbnail
+        [HttpPost]
+        public JsonResult SetThumbnail(int id, int albumID)
         {
-            return View();
-        }
-
-        // GET: Photo/Create
-        public ActionResult Create()
-        {
-            return View();
+            //throw the new id to become the next thumbnail
+            _photoRepository.SetThumbnail(id, albumID);
+            return Json(new { success = true, message = "Thumbnail has been set successfully" });
         }
 
         // POST: Photo/Create

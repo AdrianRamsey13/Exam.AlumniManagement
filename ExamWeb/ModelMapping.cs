@@ -14,6 +14,7 @@ using ExamWeb.EventService;
 using ExamWeb.PhotoAlbumService;
 using ExamWeb.PhotoService;
 using ExamWeb.Models;
+using ExamWeb.UserManagementService;
 
 namespace ExamWeb
 {
@@ -47,6 +48,13 @@ namespace ExamWeb
             CreateMap<EventDTO, EventModel>().ReverseMap();
             CreateMap<PhotoDTO, PhotoModel>().ReverseMap();
             CreateMap<PhotoAlbumDTO, PhotoAlbumModel>().ReverseMap();
+            CreateMap<UserManagementService.AspNetUserDTORoleDTO, AspNetUserModel.RoleModel>().ReverseMap();
+            CreateMap<UserManagementService.AspNetUserDTOUserDTO, AspNetUserModel.UserModel>().ReverseMap();
+            CreateMap<UserManagementService.AspNetUserDTOPermissionDTO, AspNetUserModel.PermissionModel>().ReverseMap();
+            CreateMap<UserManagementService.AspNetUserDTORolePermissionDTO, AspNetUserModel.RolePermissionModel>().ReverseMap();
+            CreateMap<UserManagementService.AspNetUserDTOUserRoleDTO, AspNetUserModel.UserRoleModel>().ReverseMap();
+            CreateMap<UserManagementService.AspNetUserDTOUserClaimDTO, AspNetUserModel.UserClaimModel>().ReverseMap();
+            CreateMap<UserManagementService.AspNetUserDTOUserLoginDTO, AspNetUserModel.UserLoginModel>().ReverseMap();
         }
     }
 }

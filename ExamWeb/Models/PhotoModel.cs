@@ -28,7 +28,7 @@ namespace ExamWeb.Models
         public string PhotoFileName { get; set; }
 
         [Display(Name = "Is Album Thumbnail")]
-        public bool? IsPhotoAlbumThumbnail { get; set; }
+        public bool IsPhotoAlbumThumbnail { get; set; }
 
         [Display(Name = "Last Modified Date")]
         public DateTime ModifiedDate { get; set; } = DateTime.Now;

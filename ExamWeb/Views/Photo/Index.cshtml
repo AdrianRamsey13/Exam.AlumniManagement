@@ -49,12 +49,12 @@
     </style>
 }
 
-<h2>Photo Gallery</h2>
+<h2>@ViewBag.AlbumName</h2>
 
 <div class="toolbar mb-3">
     <div>
         <button class="btn btn-secondary" onclick="history.back()"><i class="fas fa-arrow-left"></i> Back</button>
-        <button id="addPhotoButton" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addModal">Add Photo</button>
+        <button id="addPhotoButton" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addPhotoModal">Add Photo</button>
         <button id="deleteSelected" class="btn btn-danger">Delete Selected</button>
     </div>
     <input type="text" id="searchInput" class="form-control search-bar" placeholder="Search photo...">
@@ -69,6 +69,12 @@
                     <img src="@Url.Content(photo.PhotoPath + "/" + photo.PhotoFileName)" class="photo-img" alt="@photo.PhotoFileName">
                 </div>
                 <input type="checkbox" class="delete-checkbox" value="@photo.PhotoID">
+
+                <input type="radio" name="thumbnailRadio" class="thumbnail-radio"
+                       value="@photo.PhotoID"
+                       data-album-id="@photo.AlbumID"
+                       @(photo.IsPhotoAlbumThumbnail ? "checked" : "")> Album Thumbnail
+
             </div>
         }
     </div>
@@ -107,6 +113,28 @@
     </div>
 </div>
 
+<!-- Modal Add Photo -->
+<div class="modal fade" id="addPhotoModal" tabindex="-1" aria-labelledby="addPhotoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addPhotoLabel">Upload Photo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadPhotoForm" enctype="multipart/form-data" method="post"  novalidate>
+                    <input type="hidden" name="AlbumID" id="albumID" value="@ViewBag.AlbumID">
+                    <div class="mb-3">
+                        <label for="photoFile" class="form-label">Choose Photo</label>
+                        <input type="file" class="form-control" id="photoFile" name="PhotoFile" accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Upload</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
@@ -134,22 +162,22 @@
 
                 $(".pagination").append(
                     `<li class="page-item ${prevDisabled}">
-                                <a class="page-link" href="#" data-page="${currentPage - 1}">« Previous</a>
-                            </li>`
+                                        <a class="page-link" href="#" data-page="${currentPage - 1}">« Previous</a>
+                                    </li>`
                 );
 
                 for (let i = 1; i <= totalPages; i++) {
                     $(".pagination").append(
                         `<li class="page-item ${i === currentPage ? 'active' : ''}">
-                                    <a class="page-link" href="#" data-page="${i}">${i}</a>
-                                </li>`
+                                            <a class="page-link" href="#" data-page="${i}">${i}</a>
+                                        </li>`
                     );
                 }
 
                 $(".pagination").append(
                     `<li class="page-item ${nextDisabled}">
-                                <a class="page-link" href="#" data-page="${currentPage + 1}">Next »</a>
-                            </li>`
+                                        <a class="page-link" href="#" data-page="${currentPage + 1}">Next »</a>
+                                    </li>`
                 );
             }
 
@@ -267,5 +295,76 @@
                 }
             });
         });
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Handle submit form upload photo
+            $('#uploadPhotoForm').submit(function (event) {
+                event.preventDefault(); // Mencegah form refresh halaman
+
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: '@Url.Action("Create", "Photo", new {AlbumID = ViewBag.AlbumID})',  // Pastikan ini rute yang benar ke PhotoController
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire("Success!", "Photo uploaded successfully.", "success").then(() => {
+                                $('#addPhotoModal').modal('hide'); // Tutup modal
+                                location.reload(); // Refresh halaman
+                            });
+                        } else {
+                            Swal.fire("Error!", response.message, "error");
+                        }
+                    },
+                    error: function () {
+                        Swal.fire("Error!", "Failed to upload photo.", "error");
+                    }
+                });
+            });
+        });
+
+        $(document).on("change", ".thumbnail-radio", function () {
+            var photoID = $(this).val();
+            var albumID = $(this).data("album-id");
+
+            $.ajax({
+                url: '/Photo/SetThumbnail',  // Sesuaikan dengan route controller-mu
+                type: 'POST',
+                data: { id: photoID, albumID: albumID },
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response.message,
+                            timer: 6000,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        });
+                        location.reload();
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: "Failed to update thumbnail",
+                            showConfirmButton: true
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: "An error occurred while updating the thumbnail.",
+                        showConfirmButton: true
+                    });
+                }
+            });
+        });
+
     </script>
 }

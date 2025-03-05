@@ -10,6 +10,7 @@ using ExamWeb.Services;
 
 namespace ExamWeb.Controllers
 {
+    [Authorize]
     public class EventController : Controller
     {
         private IEventRepository _eventRepository;
@@ -177,6 +178,10 @@ namespace ExamWeb.Controllers
                 // Remove validation for image fields if they are not provided by the user
                 ModelState.Remove("EventImagePath");
                 ModelState.Remove("EventImageName");
+
+                if (file == null || file.ContentLength == 0) {
+                    ModelState.AddModelError("file","Image is Required");
+                }
 
                 if (ModelState.IsValid)
                 {

@@ -11,6 +11,7 @@ using ExamWeb.Services;
 
 namespace ExamWeb.Controllers
 {
+    [Authorize]
     public class JobHistoryController : Controller
     {
         private IJobHistoryRepository _jhRepository;

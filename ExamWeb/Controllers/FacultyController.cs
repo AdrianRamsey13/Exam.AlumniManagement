@@ -13,6 +13,7 @@ using ExamWeb.Services;
 
 namespace ExamWeb.Controllers
 {
+    [Authorize]
     public class FacultyController : Controller
     {
         private IFacultyRepository _facultyRepository;

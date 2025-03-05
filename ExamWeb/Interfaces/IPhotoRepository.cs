@@ -10,7 +10,8 @@ using ExamWeb.Models;
 namespace ExamWeb.Interfaces
 {
     public interface IPhotoRepository
-    {        
+    {
+        IEnumerable<PhotoModel> GetAllPhotos();
         IEnumerable<PhotoModel> GetPhotos(int AlbumID);
 
         
@@ -21,5 +22,7 @@ namespace ExamWeb.Interfaces
 
         
         void DeletePhoto(int id);
+
+        void SetThumbnail(int id, int AlbumID);
     }
 }

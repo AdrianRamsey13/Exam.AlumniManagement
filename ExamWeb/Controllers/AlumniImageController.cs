@@ -12,6 +12,7 @@ using ExamWeb.Services;
 
 namespace ExamWeb.Controllers
 {
+    [Authorize]
     public class AlumniImageController : Controller
     {
         public IAlumniImageRepository _alumniImageRepository;

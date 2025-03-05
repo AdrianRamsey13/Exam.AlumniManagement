@@ -12,6 +12,7 @@ using ExamWeb.Services;
 
 namespace ExamWeb.Controllers
 {
+    [Authorize]
     public class AlumniController : Controller
     {
         private IAlumniRepository _alumniRepository;
@@ -453,13 +454,6 @@ namespace ExamWeb.Controllers
             return View(alumni);
         }
 
-
-        // GET: Alumni/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
         // POST: Alumni/Delete/5
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
@@ -471,6 +465,17 @@ namespace ExamWeb.Controllers
                 {
                     return HttpNotFound();
                 }
+
+                // Delete the profile image if it exists
+                if (!string.IsNullOrEmpty(existingData.PhotoName))
+                {
+                    var filePath = Path.Combine(Server.MapPath(alumniPhotosPath), existingData.PhotoName);
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                }
+
                 _alumniRepository.DeleteAlumni(id);
                 return Json(new { success = true, message = "Alumni deleted successfully" });
             }
@@ -489,29 +494,33 @@ namespace ExamWeb.Controllers
             {
                 if (ids != null && ids.Length > 0)
                 {
+                    int count = 0;
                     foreach (var itemID in ids)
                     {
-                        _alumniRepository.DeleteAlumni(itemID);  //CHANGE THIS
+                        var existingData = _alumniRepository.GetAlumniByID(itemID);
+                        if (existingData != null)
+                        {
+                            // Delete the profile image if it exists
+                            if (!string.IsNullOrEmpty(existingData.PhotoName))
+                            {
+                                var filePath = Path.Combine(Server.MapPath(alumniPhotosPath), existingData.PhotoName);
+                                if (System.IO.File.Exists(filePath))
+                                {
+                                    System.IO.File.Delete(filePath);
+                                }
+                            }
+
+                            _alumniRepository.DeleteAlumni(itemID);
+                            count += 1;
+                        }
                     }
-                    return Json(new
-                    {
-                        success = true,
-                        message = "Selected items have been deleted successfully"
-                    });
+                    return Json(new { success = true, message = count + " items have been deleted successfully" });
                 }
-                return Json(new
-                {
-                    success = false,
-                    message = "No items selected for deletion"
-                });
+                return Json(new { success = false, message = "No items selected for deletion" });
             }
             catch (Exception ex)
             {
-                return Json(new
-                {
-                    success = false,
-                    message = "Error deleting items: " + ex.Message
-                });
+                return Json(new { success = false, message = "Error deleting items: " + ex.Message });
             }
         }
 

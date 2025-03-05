@@ -18,5 +18,8 @@ namespace ExamWeb.Models
 
         [Display(Name = "Last Modified Date")]
         public DateTime ModifiedDate { get; set; } = DateTime.Now;
+
+        public string ThumbnailPhotoPath { get; set; }
+        public string ThumbnailPhotoName { get; set; }
     }
 }

@@ -9,6 +9,7 @@ using ExamWeb.Services;
 
 namespace ExamWeb.Controllers
 {
+    [Authorize]
     public class CandidateController : Controller
     {
         private ICandidateRepository _candidateRepository;

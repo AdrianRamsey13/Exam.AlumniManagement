@@ -11,33 +11,47 @@ using ExamWeb.Services;
 
 namespace ExamWeb.Controllers
 {
+    [Authorize]
     public class PhotoAlbumController : Controller
     {
         private readonly IPhotoAlbumRepository _photoAlbumRepository;
-        
+        private readonly IPhotoRepository _photoRepository;
+
         public PhotoAlbumController()
         {
             _photoAlbumRepository = new PhotoAlbumRepository();
+            _photoRepository = new PhotoRepository();
         }
 
         // GET: PhotoAlbum
         public ActionResult Index()
         {
-            var photoAlbumDTOs = _photoAlbumRepository.GetPhotoAlbums(); // Misal ini mengembalikan DTO[]
+            // Ambil data album dalam bentuk DTO
+            var photoAlbumDTOs = _photoAlbumRepository.GetPhotoAlbums();
 
+            // Ambil semua foto yang memiliki IsPhotoAlbumThumbnail == true
+            var thumbnailPhotos = _photoRepository.GetAllPhotos()
+                .Where(photo => photo.IsPhotoAlbumThumbnail) // Hanya thumbnail
+                .ToList();
+
+            // Mapping DTO ke Model dan ambil thumbnail jika ada
             var photoAlbumModels = photoAlbumDTOs.Select(dto => new PhotoAlbumModel
             {
                 AlbumID = dto.AlbumID,
                 AlbumName = dto.AlbumName,
-                ModifiedDate = dto.ModifiedDate
+                ModifiedDate = dto.ModifiedDate,
+                ThumbnailPhotoPath = thumbnailPhotos.FirstOrDefault(p => p.AlbumID == dto.AlbumID)?.PhotoPath, // Ambil foto thumbnail berdasarkan AlbumID
+                ThumbnailPhotoName = thumbnailPhotos.FirstOrDefault(p => p.AlbumID == dto.AlbumID)?.PhotoFileName // Ambil nama foto thumbnail berdasarkan AlbumID
+
             }).ToList();
 
-            ViewBag.AlbumList = _photoAlbumRepository.GetPhotoAlbums()
+            // ViewBag untuk dropdown
+            ViewBag.AlbumList = photoAlbumDTOs
                 .Select(p => new SelectListItem
-                 {
-                     Value = p.AlbumID.ToString(),
-                     Text = p.AlbumName
-                 }).ToList();
+                {
+                    Value = p.AlbumID.ToString(),
+                    Text = p.AlbumName
+                }).ToList();
 
             return View(photoAlbumModels);
         }

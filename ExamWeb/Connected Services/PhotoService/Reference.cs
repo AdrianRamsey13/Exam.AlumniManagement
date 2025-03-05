@@ -158,6 +158,12 @@ namespace ExamWeb.PhotoService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="PhotoService.IPhotoService")]
     public interface IPhotoService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/GetAllPhotos", ReplyAction="http://tempuri.org/IPhotoService/GetAllPhotosResponse")]
+        ExamWeb.PhotoService.PhotoDTO[] GetAllPhotos();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/GetAllPhotos", ReplyAction="http://tempuri.org/IPhotoService/GetAllPhotosResponse")]
+        System.Threading.Tasks.Task<ExamWeb.PhotoService.PhotoDTO[]> GetAllPhotosAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/GetPhotos", ReplyAction="http://tempuri.org/IPhotoService/GetPhotosResponse")]
         ExamWeb.PhotoService.PhotoDTO[] GetPhotos(int AlbumID);
         
@@ -181,6 +187,12 @@ namespace ExamWeb.PhotoService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/DeletePhoto", ReplyAction="http://tempuri.org/IPhotoService/DeletePhotoResponse")]
         System.Threading.Tasks.Task DeletePhotoAsync(int id);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/SetThumbnail", ReplyAction="http://tempuri.org/IPhotoService/SetThumbnailResponse")]
+        void SetThumbnail(int id, int albumID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/SetThumbnail", ReplyAction="http://tempuri.org/IPhotoService/SetThumbnailResponse")]
+        System.Threading.Tasks.Task SetThumbnailAsync(int id, int albumID);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -208,6 +220,14 @@ namespace ExamWeb.PhotoService {
         
         public PhotoServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public ExamWeb.PhotoService.PhotoDTO[] GetAllPhotos() {
+            return base.Channel.GetAllPhotos();
+        }
+        
+        public System.Threading.Tasks.Task<ExamWeb.PhotoService.PhotoDTO[]> GetAllPhotosAsync() {
+            return base.Channel.GetAllPhotosAsync();
         }
         
         public ExamWeb.PhotoService.PhotoDTO[] GetPhotos(int AlbumID) {
@@ -240,6 +260,14 @@ namespace ExamWeb.PhotoService {
         
         public System.Threading.Tasks.Task DeletePhotoAsync(int id) {
             return base.Channel.DeletePhotoAsync(id);
+        }
+        
+        public void SetThumbnail(int id, int albumID) {
+            base.Channel.SetThumbnail(id, albumID);
+        }
+        
+        public System.Threading.Tasks.Task SetThumbnailAsync(int id, int albumID) {
+            return base.Channel.SetThumbnailAsync(id, albumID);
         }
     }
 }

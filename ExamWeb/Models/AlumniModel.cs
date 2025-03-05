@@ -31,6 +31,7 @@ namespace ExamWeb.Models
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Email addresss is invalid")]
         [DisplayName("Email")]
+        [StringLength(25, ErrorMessage = "Email must be between 1-25 characters")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Mobile number is required")]
         [StringLength(15, ErrorMessage = "Mobile number must be between 1 - 15 characters")]

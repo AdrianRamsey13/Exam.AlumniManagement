@@ -141,7 +141,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-center">
-                <img id="modalImage" src="" class="img-fluid" alt="Full Image">
+                <img id="modalImage" src="" class="img-fluid" alt="Full Image" style="max-width: 300px;">
             </div>
             <div class="modal-footer">
             </div>
@@ -154,7 +154,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="createModalLabel">Create New Item</h5>
+                <h5 class="modal-title" id="createModalLabel">Create Event</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             @using (Html.BeginForm("UpsertEvent", "Event", FormMethod.Post, new { id = "createForm", enctype = "multipart/form-data" }))
@@ -183,11 +183,11 @@
                             <label>Date</label>
                             <div class="row">
                                 <div class="col-md-5">
-                                    @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", type = "date", max = DateTime.Now.ToString("yyyy-MM-dd") } })
+                                    @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", type = "date", id = "startDate", min = DateTime.Now.ToString("yyyy-MM-dd") } })
                                     @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-md-5">
-                                    @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", type = "date", max = DateTime.Now.ToString("yyyy-MM-dd") } })
+                                    @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", type = "date", id = "endDate" } })
                                     @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -203,7 +203,7 @@
                         <div class="form-group mt-2">
                             <label for="file">Image</label>
                             <div class="col-md-10">
-                                <input type="file" id="file" name="file" class="form-control" accept=".jpg, .jpeg, .png">
+                                <input type="file" id="file" name="file" class="form-control" accept=".jpg, .jpeg, .png" required>
                                 <small class="text-muted">Allowed formats: .jpg, .jpeg, .png</small>
                             </div>
                         </div>
@@ -222,7 +222,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success">Create</button>
+                    <button type="submit" class="btn btn-success">Save</button>
                 </div>
             }
         </div>
@@ -234,7 +234,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Edit Alumni Profile</h5>
+                <h5 class="modal-title" id="editModalLabel">Edit Event</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             @using (Html.BeginForm("UpsertEvent", "Event", FormMethod.Post, new { id = "createForm", enctype = "multipart/form-data" }))
@@ -264,11 +264,11 @@
                             <label>Date</label>
                             <div class="row">
                                 <div class="col-md-5">
-                                    @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", type = "date", max = DateTime.Now.ToString("yyyy-MM-dd") } })
+                                    @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", type = "date", min = DateTime.Now.ToString("yyyy-MM-dd") } })
                                     @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-md-5">
-                                    @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", type = "date", max = DateTime.Now.ToString("yyyy-MM-dd") } })
+                                    @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", type = "date", min = DateTime.Now.ToString("yyyy-MM-dd") } })
                                     @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -301,7 +301,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success">Create</button>
+                    <button type="submit" class="btn btn-success">Save</button>
                 </div>
             }
         </div>
@@ -331,20 +331,31 @@
                     {
                         "data": null,
                         "render": function (data, type, row) {
-                            return '<input type="checkbox" class="selectCheckbox" data-id="' + row.EventID + '" />';
+                            if (!row.IsClosed) {
+                                return '<input type="checkbox" class="selectCheckbox" data-id="' + row.EventID + '" />';
+                            } else {
+                                return '';
+                            }                            
                         }
                     },
                     {
                         "data": null,
                         "render": function (data, type, row) {
-                            return '<div style="display: flex; gap: 5px;">' +
-                                '<a href="javascript:void(0);" class="btn btn-primary" data-id="' + row.EventID + '" id="editButton">' +
-                                '<i class="fas fa-edit"></i>' +
-                                '</a>' +
-                                '<button id="deleteButton" class="btn btn-danger deleteButton" data-id="' + row.EventID + '">' +
-                                '<i class="fas fa-trash"></i>' +
-                                '</button>' +
-                                '</div>';
+                            let buttons = ""; // Default kosong
+
+                            // Jika event belum closed, tampilkan tombol Edit & Delete
+                            if (!row.IsClosed) {
+                                buttons += `
+                                <button class="btn btn-primary editButton" data-id="${row.EventID}" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger deleteButton" data-id="${row.EventID}" title="Delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            `;
+                            }
+
+                            return `<div style="display: flex; gap: 5px; align-items: center;">${buttons}</div>`;
                         }
                     },
                     {
@@ -376,7 +387,13 @@
                             return moment(data).format('DD-MMM-YYYY');
                         }
                     },
-                    { "data": "IsClosed" },
+                    {
+                        "data": "IsClosed",
+                        "render": function (data, type, row) {
+                            return data ? '<span class="badge bg-danger">Closed</span>'
+                                : '<span class="badge bg-success">Open</span>';
+                        }
+                    },
                     {
                         "data": "ModifiedDate",
                         "render": function (data, type, row) {
@@ -400,6 +417,11 @@
                         "last": ">>"
                     }
                 },
+                "rowCallback": function (row, data) {
+                    if (data.IsClosed) {
+                        $(row).css('background-color', '#BAE0F3'); // Ubah warna baris jika Closed
+                    }
+                }
             });
             $('#eventsData_filter input').unbind();
             $('#eventsData_filter input').on('keyup', function (e) {
@@ -569,7 +591,7 @@
                 }
             });
 
-            $(document).on('click', '#editButton', function () {
+            $(document).on('click', '.editButton', function () {
                 var eventID = $(this).data('id');
                 $.ajax({
                     url: '/Event/GetEventByID/' + eventID,
@@ -624,7 +646,6 @@
                     processData: false, // Prevent jQuery from processing data
                     contentType: false, // Ensure correct content type for file upload
                     success: function (response) {
-                        console.log(response); // Debugging to check if it's returning JSON
 
                         if (response.success) { // Ensure it's checking success correctly
                             $('#editModal').modal('hide'); // Close modal
@@ -696,4 +717,27 @@
             });
         });
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const startDateInput = document.getElementById("startDate");
+            const endDateInput = document.getElementById("endDate");
+
+            // Set start date agar tidak bisa mundur dari hari ini
+            const today = new Date().toISOString().split("T")[0];
+            startDateInput.setAttribute("min", today);
+
+            startDateInput.addEventListener("change", function () {
+                // Pastikan endDate tidak kurang dari startDate
+                endDateInput.setAttribute("min", this.value);
+            });
+
+            endDateInput.addEventListener("change", function () {
+                if (this.value < startDateInput.value) {
+                    alert("End date tidak boleh lebih kecil dari start date.");
+                    this.value = startDateInput.value;
+                }
+            });
+        });
+    </script>
+
 }

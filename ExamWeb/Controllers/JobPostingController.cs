@@ -13,6 +13,7 @@ using WebGrease.Activities;
 
 namespace ExamWeb.Controllers
 {
+    [Authorize]
     public class JobPostingController : Controller
     {
         private IJobPostingRepository _jpRepository;

@@ -18,6 +18,13 @@ namespace ExamWeb.Services
 
         public IEnumerable<FacultyDTO> GetFaculties()
         {
+            try
+            {
+                //if faculty service client is not active 
+            }catch(Exception ex)
+            {
+                throw ex;
+            }
             var data = _facultyServiceClient.GetFaculties();
             return data;
         }

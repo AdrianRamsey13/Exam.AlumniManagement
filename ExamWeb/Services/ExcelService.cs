@@ -127,15 +127,15 @@ namespace ExamWeb.Services
                 maxColumnWidths[2] = Math.Max(maxColumnWidths[2], (data.ToList()[i].MiddleName ?? "").Length);
                 maxColumnWidths[3] = Math.Max(maxColumnWidths[3], data.ToList()[i].LastName.Length);
                 maxColumnWidths[4] = Math.Max(maxColumnWidths[4], (data.ToList()[i].Gender ?? "").Length);
-                maxColumnWidths[5] = Math.Max(maxColumnWidths[4], data.ToList()[i].Email.Length);
-                maxColumnWidths[6] = Math.Max(maxColumnWidths[5], data.ToList()[i].MobileNumber.Length);
-                maxColumnWidths[7] = Math.Max(maxColumnWidths[6], data.ToList()[i].Address.Length);
-                maxColumnWidths[8] = Math.Max(maxColumnWidths[7], data.ToList()[i].FullAddresses.Length);
-                maxColumnWidths[9] = Math.Max(maxColumnWidths[8], data.ToList()[i].FullFacultyMajorName.Length);
-                maxColumnWidths[10] = Math.Max(maxColumnWidths[9], data.ToList()[i].DateOfBirth.ToString().Length);
-                maxColumnWidths[11] = Math.Max(maxColumnWidths[10], data.ToList()[i].GraduationYear.ToString().Length);
-                maxColumnWidths[12] = Math.Max(maxColumnWidths[11], (data.ToList()[i].Degree ?? "").Length);
-                maxColumnWidths[13] = Math.Max(maxColumnWidths[12], (data.ToList()[i].LinkedInProfile ?? "").Length);
+                maxColumnWidths[5] = Math.Max(maxColumnWidths[5], data.ToList()[i].Email.Length);
+                maxColumnWidths[6] = Math.Max(maxColumnWidths[6], data.ToList()[i].MobileNumber.Length);
+                maxColumnWidths[7] = Math.Max(maxColumnWidths[7], data.ToList()[i].Address.Length);
+                maxColumnWidths[8] = Math.Max(maxColumnWidths[8], data.ToList()[i].FullAddresses.Length);
+                maxColumnWidths[9] = Math.Max(maxColumnWidths[9], data.ToList()[i].FullFacultyMajorName.Length);
+                maxColumnWidths[10] = Math.Max(maxColumnWidths[10], data.ToList()[i].DateOfBirth.ToString().Length);
+                maxColumnWidths[11] = Math.Max(maxColumnWidths[11], data.ToList()[i].GraduationYear.ToString().Length);
+                maxColumnWidths[12] = Math.Max(maxColumnWidths[12], (data.ToList()[i].Degree ?? "").Length);
+                maxColumnWidths[13] = Math.Max(maxColumnWidths[13], (data.ToList()[i].LinkedInProfile ?? "").Length);
             }
             for (int col = 1; col < maxColumnWidths.Length; col++)
             {
@@ -184,13 +184,13 @@ namespace ExamWeb.Services
 
             masterSheet.VisibilityType = VisibilityType.VeryHidden;
 
-            int fullAdressColumnIndex = 7;
+            int fullAdressColumnIndex = 8;
             CellArea fullAdressArea = CellArea.CreateCellArea(1, fullAdressColumnIndex, 1000, fullAdressColumnIndex);
             Validation fullAdressValidation = workSheet.Validations[workSheet.Validations.Add(fullAdressArea)];
             fullAdressValidation.Type = ValidationType.List;
             fullAdressValidation.Formula1 = "=Master!$A$1:$A$" + districts.Count;
 
-            int fullFacultyMajorNameColumnIndex = 8;
+            int fullFacultyMajorNameColumnIndex = 9;
             CellArea fullFacultyMajorNameArea = CellArea.CreateCellArea(1, fullFacultyMajorNameColumnIndex, 1000, fullFacultyMajorNameColumnIndex);
             Validation fullFacultyMajorNameValidation = workSheet.Validations[workSheet.Validations.Add(fullFacultyMajorNameArea)];
             fullFacultyMajorNameValidation.Type = ValidationType.List;

@@ -7,6 +7,12 @@
       <xsd:import schemaLocation="http://localhost:50219/Services/PhotoService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/ExamWCF.DTOs" />
     </xsd:schema>
   </wsdl:types>
+  <wsdl:message name="IPhotoService_GetAllPhotos_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllPhotos" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_GetAllPhotos_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllPhotosResponse" />
+  </wsdl:message>
   <wsdl:message name="IPhotoService_GetPhotos_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPhotos" />
   </wsdl:message>
@@ -31,7 +37,17 @@
   <wsdl:message name="IPhotoService_DeletePhoto_OutputMessage">
     <wsdl:part name="parameters" element="tns:DeletePhotoResponse" />
   </wsdl:message>
+  <wsdl:message name="IPhotoService_SetThumbnail_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetThumbnail" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_SetThumbnail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetThumbnailResponse" />
+  </wsdl:message>
   <wsdl:portType name="IPhotoService">
+    <wsdl:operation name="GetAllPhotos">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/GetAllPhotos" message="tns:IPhotoService_GetAllPhotos_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/GetAllPhotosResponse" message="tns:IPhotoService_GetAllPhotos_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetPhotos">
       <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/GetPhotos" message="tns:IPhotoService_GetPhotos_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/GetPhotosResponse" message="tns:IPhotoService_GetPhotos_OutputMessage" />
@@ -48,9 +64,22 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/DeletePhoto" message="tns:IPhotoService_DeletePhoto_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/DeletePhotoResponse" message="tns:IPhotoService_DeletePhoto_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="SetThumbnail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/SetThumbnail" message="tns:IPhotoService_SetThumbnail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/SetThumbnailResponse" message="tns:IPhotoService_SetThumbnail_OutputMessage" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IPhotoService" type="tns:IPhotoService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetAllPhotos">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/GetAllPhotos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetPhotos">
       <soap:operation soapAction="http://tempuri.org/IPhotoService/GetPhotos" style="document" />
       <wsdl:input>
@@ -80,6 +109,15 @@
     </wsdl:operation>
     <wsdl:operation name="DeletePhoto">
       <soap:operation soapAction="http://tempuri.org/IPhotoService/DeletePhoto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetThumbnail">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/SetThumbnail" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

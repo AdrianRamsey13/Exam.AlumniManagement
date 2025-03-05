@@ -20,6 +20,13 @@ namespace ExamWeb.Services
             _photoAlbumServiceClient = new PhotoAlbumServiceClient();
         }
 
+        public IEnumerable<PhotoModel> GetAllPhotos()
+        {
+            var photos = _photoServiceClient.GetAllPhotos();
+            var mapped = Mapping.Mapper.Map<IEnumerable<PhotoModel>>(photos);
+            return mapped;
+        }
+
         public IEnumerable<PhotoModel> GetPhotos(int AlbumID)
         {
             var album = _photoAlbumServiceClient.GetPhotoAlbumById(AlbumID);
@@ -57,6 +64,11 @@ namespace ExamWeb.Services
         public void DeletePhoto(int id)
         {
             _photoServiceClient.DeletePhoto(id);
+        }
+
+        public void SetThumbnail(int id, int AlbumID)
+        {
+            _photoServiceClient.SetThumbnail(id, AlbumID);
         }
     }
 }

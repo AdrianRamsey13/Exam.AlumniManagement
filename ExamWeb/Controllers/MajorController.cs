@@ -10,6 +10,7 @@ using ExamWeb.Services;
 
 namespace ExamWeb.Controllers
 {
+    [Authorize]
     public class MajorController : Controller
     {
         private IMajorRepository _majorRepository;
